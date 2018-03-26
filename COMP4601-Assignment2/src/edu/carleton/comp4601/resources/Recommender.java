@@ -18,7 +18,8 @@ public class Recommender {
 	@Context
 	Request request;
 
-	private String name, authorName1, authorName2;
+	String name, authorName1, authorName2;
+	CrawlerController controller;
 
 	public Recommender() {
 		authorName1 = "Avery Vine";
@@ -38,6 +39,15 @@ public class Recommender {
 	public Response reset(@PathParam("dir") String dir) {
 		System.out.println("reset -> " + dir);
 		Response res = Response.ok().build();
+		Database.getInstance().clear();
+		try {
+			controller = new CrawlerController(dir);
+			controller.crawl();
+		} catch (Exception e) {
+			System.err.println("Error crawling data in dir: " + dir);
+			e.printStackTrace();
+			res = Response.serverError().build();
+		}
 		return res;
 	}
 	
