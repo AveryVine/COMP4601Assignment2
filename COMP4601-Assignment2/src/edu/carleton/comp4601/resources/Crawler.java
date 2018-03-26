@@ -58,14 +58,16 @@ public class Crawler extends WebCrawler {
 	public void visit(Page page) {
 		String url = page.getWebURL().getURL();
 		System.out.println("URL: " + url);
+		String title = "";
 
 		try {
 			InputStream input = TikaInputStream.get(new URL(page.getWebURL().getURL()));
-			ContentHandler contentHandler = new BodyContentHandler();
+			ContentHandler contentHandler = new BodyContentHandler(-1);
 			Metadata metadata = new Metadata();
 			ParseContext parseContext = new ParseContext();
 			Parser parser = new AutoDetectParser();
 			parser.parse(input, contentHandler, metadata, parseContext);
+			title = metadata.get(Metadata.TITLE);
 			input.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -78,14 +80,18 @@ public class Crawler extends WebCrawler {
 			String html = htmlParseData.getHtml();
 			Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
-			// Crawl time calculation
-			endTime = System.currentTimeMillis();
-			int crawlTime = (int) (endTime - startTime);
-
-			this.getMyController().getConfig().setPolitenessDelay((int) (crawlTime * 10));
-
-			// Generate vertex and add to graph
-//			int docId = page.getWebURL().getDocid();
+			int docId = page.getWebURL().getDocid();
+			if (page.getWebURL().getURL().contains("pages")) {
+				System.out.println("Adding webpage");
+				WebPage webPage = new WebPage(docId, title);
+				Database.getInstance().insert(webPage);
+			} else if (page.getWebURL().getURL().contains("users")) {
+				System.out.println("Adding user");
+				User user = new User(docId, title);
+				Database.getInstance().insert(user);
+			} else {
+				System.out.println("Failed to classify crawled webpage");
+			}
 
 			// Output for debugging purposes
 			System.out.println("Text length: " + text.length());

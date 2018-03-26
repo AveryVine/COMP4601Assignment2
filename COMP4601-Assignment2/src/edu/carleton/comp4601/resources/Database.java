@@ -9,7 +9,7 @@ import org.bson.Document;
 public class Database {
 
 	static Database instance;
-	MongoCollection<Document> userCollection;
+	MongoCollection<Document> userCollection, webpageCollection;
 	MongoClient mongoClient;
 	MongoDatabase database;
 	
@@ -18,19 +18,34 @@ public class Database {
 		database = mongoClient.getDatabase("assignment2");
 		
 		userCollection = database.getCollection("userData");
+		webpageCollection = database.getCollection("webpageData");
 	}
 	
-	public void insert(User user) {
+	public synchronized void insert(User user) {
 		userCollection.insertOne(serialize(user));
+	}
+	
+	public synchronized void insert(WebPage webpage) {
+		webpageCollection.insertOne(serialize(webpage));
 	}
 	
 	private Document serialize(User user) {
 		Document doc = new Document();
+		doc.put("docId", user.getDocId());
+		doc.put("name", user.getName());
+		return doc;
+	}
+	
+	private Document serialize(WebPage webpage) {
+		Document doc = new Document();
+		doc.put("docId", webpage.getDocId());
+		doc.put("name", webpage.getName());
 		return doc;
 	}
 	
 	public void clear() {
 		userCollection.drop();
+		webpageCollection.drop();
 	}
 	
 	public static Database getInstance() {

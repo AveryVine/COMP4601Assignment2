@@ -1,11 +1,11 @@
 package edu.carleton.comp4601.resources;
 
-public class User {
-	
+public class WebPage {
+
 	int docId;
 	String name;
 	
-	public User(int docId, String name) {
+	public WebPage(int docId, String name) {
 		this.docId = docId;
 		this.name = name;
 	}
@@ -17,5 +17,5 @@ public class User {
 	public String getName() {
 		return name;
 	}
-
+	
 }
