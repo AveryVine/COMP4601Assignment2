@@ -1,40 +1,18 @@
 package edu.carleton.comp4601.resources;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 
-import org.bson.Document;
-
-import edu.uci.ics.crawler4j.url.WebURL;
-
-public class User extends Document {
+public class User {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -9022027290860912051L;
 	int docId;
-	String name;
-	Set<String> pagesVisited;
+	String name, url;
+	Set<String> webpages;
 	
-	public User(int docId, String name, Set<WebURL> pagesVisitedAsWebURLs) {
+	public User(int docId, String name, String url, Set<String> webpages) {
 		this.docId = docId;
-		put("docId", docId);
 		this.name = name;
-		put("name", name);
-		pagesVisited = new HashSet<String>();
-		for (WebURL url : pagesVisitedAsWebURLs) {
-			pagesVisited.add(url.getAnchor());
-		}
-		put("pagesVisited", pagesVisited);
-	}
-
-	@SuppressWarnings("unchecked")
-	public User(Document doc) {
-		this.docId = doc.getInteger("docId");
-		this.name = doc.getString("name");
-		//this.pagesVisited = new HashSet<String>((ArrayList<String>) doc.get("pagesVisited"));
+		this.url = url;
+		this.webpages = webpages;
 	}
 	
 	public int getDocId() { 
@@ -45,8 +23,12 @@ public class User extends Document {
 		return name;
 	}
 	
-	public Set<String> getPagesVisited() {
-		return pagesVisited;
+	public String getUrl() {
+		return url;
+	}
+	
+	public Set<String> getWebPages() {
+		return webpages;
 	}
 	
 }

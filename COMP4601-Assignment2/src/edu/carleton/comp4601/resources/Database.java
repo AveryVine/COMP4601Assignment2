@@ -5,10 +5,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-import edu.uci.ics.crawler4j.url.WebURL;
-
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.bson.Document;
@@ -29,11 +26,49 @@ public class Database {
 	}
 	
 	public synchronized void insert(User user) {
-		userCollection.insertOne(user);
+		userCollection.insertOne(serialize(user));
 	}
 	
 	public synchronized void insert(WebPage webpage) {
-		webpageCollection.insertOne(webpage);
+		webpageCollection.insertOne(serialize(webpage));
+	}
+	
+	public Document serialize(User user) {
+		Document doc = new Document();
+		doc.put("docId", user.getDocId());
+		doc.put("name", user.getName());
+		doc.put("url", user.getUrl());
+		doc.put("webpages", user.getWebPages());
+		return doc;
+	}
+	
+	public Document serialize(WebPage webpage) {
+		Document doc = new Document();
+		doc.put("docId", webpage.getDocId());
+		doc.put("name", webpage.getName());
+		doc.put("url", webpage.getUrl());
+		doc.put("users", webpage.getUsers());
+		doc.put("content", webpage.getContent());
+		return doc;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public User deserializeUser(Document doc) {
+		int docId = doc.getInteger("docId", -1);
+		String name = doc.getString("name");
+		String url = doc.getString("url");
+		Set<String> webpages = (Set<String>) doc.get("webpages");
+		return new User(docId, name, url, webpages);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public WebPage deserializeWebPage(Document doc) {
+		int docId = doc.getInteger("docId", -1);
+		String name = doc.getString("name");
+		String url = doc.getString("url");
+		Set<String> users = (Set<String>) doc.get("users");
+		String content = doc.getString("content");
+		return new WebPage(docId, name, url, users, content);
 	}
 
 	public void clear() {
@@ -41,43 +76,40 @@ public class Database {
 		webpageCollection.drop();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public User getUser(String name) {
-		org.bson.Document query = new org.bson.Document("name", name);
+		Document query = new Document("name", name);
 		FindIterable<Document> result = userCollection.find(query);
-	
-		Document user = result.first();
-		return user != null? (User) user : null;
+		Document doc = result.first();
+		if (doc != null) {
+			return deserializeUser(doc);
+		}
+		return null;
 	}
 	
 	public ArrayList<User> getUsers() {
-		ArrayList<Document> documents = (ArrayList<Document>) userCollection.find().into(new ArrayList<Document>());
-		System.out.println("documentsNum is " + documents.size());
+		ArrayList<Document> docs = (ArrayList<Document>) userCollection.find().into(new ArrayList<Document>());
+		System.out.println("Number of user documents: " + docs.size());
 		ArrayList<User> userList = new ArrayList<User>();
-		int count = 0;
-		for (Document doc : documents) {
-			System.out.println("has next " + count++ + ", name is " + doc.getString("name"));
-			userList.add(new User(doc));
+		for (Document doc : docs) {
+			userList.add(deserializeUser(doc));
 		}
-//		userList.add(new User(11, "bob", new HashSet<WebURL>()));
-//		userList.add(new User(14, "hones", new HashSet<WebURL>()));
-
 		return userList;	 
 	}
 	
-	@SuppressWarnings("unchecked")
 	public WebPage getWebPage(String name) {
-		org.bson.Document query = new org.bson.Document("name", name);
+		Document query = new Document("name", name);
 		FindIterable<Document> result = webpageCollection.find(query);
-	
-		Document page = result.first();
-		return page != null? (WebPage) page : null;
+		Document doc = result.first();
+		if (doc != null) {
+			return deserializeWebPage(doc);
+		}
+		return null;
 	}
 	
 	public boolean userExists(String name) {
-		org.bson.Document query = new org.bson.Document("name", name);
+		Document query = new Document("name", name);
 		FindIterable<Document> result = userCollection.find(query);
-		return result.first() != null? true : false;
+		return result.first() != null;
 	}
 	
 	public static Database getInstance() {

@@ -3,6 +3,8 @@ package edu.carleton.comp4601.resources;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -22,7 +24,6 @@ import edu.uci.ics.crawler4j.url.WebURL;
 public class Crawler extends WebCrawler {
 
 	private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg" + "|png|mp3|mp4|zip|gz))$");
-	private long startTime = System.currentTimeMillis(), endTime = System.currentTimeMillis();
 	ArrayList<String> saxParserMimeTypes;
 
 	/**
@@ -39,16 +40,6 @@ public class Crawler extends WebCrawler {
 		String href = url.getURL().toLowerCase();
 		return !FILTERS.matcher(href).matches() && ((href.startsWith("https://sikaman.dyndns.org/courses/4601/assignments")));
 	}
-	
-	/*
-	 * Purpose: we overrode this in order to track the start time of the crawl
-	 * Input: the WebUrl of the page to be crawled, the status code of the fetch of the page, the status description
-	 * Return: none
-	 */
-	@Override
-	protected void handlePageStatusCode(WebURL webUrl, int statusCode, String statusDescription) {
-		startTime = System.currentTimeMillis();
-	}
 
 	/**
 	 * This function is called when a page is fetched and ready to be processed by
@@ -59,6 +50,7 @@ public class Crawler extends WebCrawler {
 		String url = page.getWebURL().getURL();
 		System.out.println("URL: " + url);
 		String title = "";
+		String content = "";
 
 		try {
 			InputStream input = TikaInputStream.get(new URL(page.getWebURL().getURL()));
@@ -68,6 +60,7 @@ public class Crawler extends WebCrawler {
 			Parser parser = new AutoDetectParser();
 			parser.parse(input, contentHandler, metadata, parseContext);
 			title = metadata.get(Metadata.TITLE);
+			content = contentHandler.toString();
 			input.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -78,17 +71,21 @@ public class Crawler extends WebCrawler {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
 			String text = htmlParseData.getText();
 			String html = htmlParseData.getHtml();
-			Set<WebURL> links = htmlParseData.getOutgoingUrls();
+			Set<WebURL> outgoingUrls = htmlParseData.getOutgoingUrls();
+			Set<String> links = new HashSet<String>();
+			for (WebURL webUrl : outgoingUrls) {
+				links.add(webUrl.getAnchor());
+			}
 
 			int docId = page.getWebURL().getDocid();
-			if (page.getWebURL().getURL().contains("pages")) {
+			if (url.contains("pages")) {
 				System.out.println("Adding webpage");
-				WebPage webPage = new WebPage(docId, title, links);
+				WebPage webPage = new WebPage(docId, title, url, links, content);
 				Database.getInstance().insert(webPage);
-			} else if (page.getWebURL().getURL().contains("users")) {
+			} else if (url.contains("users")) {
 				System.out.println("Adding user");
 				if (title != "") {
-					User user = new User(docId, title, links);
+					User user = new User(docId, title, url, links);
 					Database.getInstance().insert(user);
 				}
 			} else {
@@ -98,7 +95,7 @@ public class Crawler extends WebCrawler {
 			// Output for debugging purposes
 			System.out.println("Text length: " + text.length());
 			System.out.println("Html length: " + html.length());
-			System.out.println("Number of outgoing links: " + links.size());
+			System.out.println("Number of outgoing links: " + outgoingUrls.size());
 		}
 	}
 }
