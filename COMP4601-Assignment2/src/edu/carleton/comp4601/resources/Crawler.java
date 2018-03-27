@@ -3,8 +3,6 @@ package edu.carleton.comp4601.resources;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -80,11 +78,14 @@ public class Crawler extends WebCrawler {
 			int docId = page.getWebURL().getDocid();
 			if (url.contains("pages")) {
 				System.out.println("Adding webpage");
-				WebPage webPage = new WebPage(docId, title, url, links, content);
+				//For WebPage, we should split up the content on the page per user and point user to that content. 
+				//Also, the way getUsersFromLinks works right is by filtering out all non-user links from the webpage. 
+				//Might want to preserve non-user links in a different way. 
+				WebPage webPage = new WebPage(docId, title, url, getUsersFromLinks(links), content); 
 				Database.getInstance().insert(webPage);
 			} else if (url.contains("users")) {
 				System.out.println("Adding user");
-				if (title != "") {
+				if (title != "" && !title.contains(" ")) {
 					User user = new User(docId, title, url, links);
 					Database.getInstance().insert(user);
 				}
@@ -97,5 +98,16 @@ public class Crawler extends WebCrawler {
 			System.out.println("Html length: " + html.length());
 			System.out.println("Number of outgoing links: " + outgoingUrls.size());
 		}
+	}
+	
+	public ArrayList<String> getUsersFromLinks(ArrayList<String> users) {
+		ArrayList<String> validUsers = new ArrayList<String>(); 
+		for (String user : users) {
+			if (Database.getInstance().userExists(user)) { //if user text is in database then confirm as real user
+				validUsers.add(user);
+			}
+		}
+		
+		return validUsers;
 	}
 }

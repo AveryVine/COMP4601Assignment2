@@ -95,5 +95,30 @@ public class Recommender {
 		String res = "<html> <title> Advertising </title> <body> Adversiting </body> </html>";
 		return res;
 	}
+	
+	@GET
+	@Path("users")
+	@Produces(MediaType.TEXT_HTML)
+	public String userList() {
+		String res = "<html> <title> User List </title> <body> User List <table border='1'> <tr> <th> docId </th> <th> Name </th> <th> # pages visited </th> </tr> ";//</body> </html>";
+		
+		for (User user : Database.getInstance().getUsers()) {
+			res += "<tr> <th> " + user.getDocId() + "</th> <th> " + user.getName() + "</th> <th> " + user.getWebPages().size() + "</th> </tr>";
+ 		}
+		res += "</table> </body> </html>";
+		return res;
+	}
 
+	@GET
+	@Path("pages")
+	@Produces(MediaType.TEXT_HTML)
+	public String pageList() {
+		String res = "<html> <title> Page List </title> <body> Page List <table border='1'> <tr> <th> docId </th> <th> Name </th> <th> # reviews </th> </tr> ";//</body> </html>";
+		
+		for (WebPage page : Database.getInstance().getWebPages()) {
+			res += "<tr> <th> " + page.getDocId() + "</th> <th> " + page.getName() + "</th> <th> " + page.getUsers().size() + "</th> </tr>";
+ 		}
+		res += "</table> </body> </html>";
+		return res;
+	}
 }

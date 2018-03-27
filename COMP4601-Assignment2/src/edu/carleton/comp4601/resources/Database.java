@@ -95,6 +95,12 @@ public class Database {
 		return userList;	 
 	}
 	
+	public boolean userExists(String name) {
+		Document query = new Document("name", name);
+		FindIterable<Document> result = userCollection.find(query);
+		return result.first() != null;
+	}
+	
 	public WebPage getWebPage(String name) {
 		Document query = new Document("name", name);
 		FindIterable<Document> result = webpageCollection.find(query);
@@ -105,10 +111,14 @@ public class Database {
 		return null;
 	}
 	
-	public boolean userExists(String name) {
-		Document query = new Document("name", name);
-		FindIterable<Document> result = userCollection.find(query);
-		return result.first() != null;
+	public ArrayList<WebPage> getWebPages() {
+		ArrayList<Document> docs = (ArrayList<Document>) webpageCollection.find().into(new ArrayList<Document>());
+		System.out.println("Number of webpage documents: " + docs.size());
+		ArrayList<WebPage> webpageList = new ArrayList<WebPage>();
+		for (Document doc : docs) {
+			webpageList.add(deserializeWebPage(doc));
+		}
+		return webpageList;	 
 	}
 	
 	public static Database getInstance() {
