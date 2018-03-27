@@ -35,5 +35,5 @@ public class WebPage {
 	public String getContent() {
 		return content;
 	}
-
+	
 }

@@ -6,6 +6,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.bson.Document;
@@ -57,7 +58,7 @@ public class Database {
 		int docId = doc.getInteger("docId", -1);
 		String name = doc.getString("name");
 		String url = doc.getString("url");
-		Set<String> webpages = (Set<String>) doc.get("webpages");
+		Set<String> webpages = new HashSet<String>((ArrayList<String>) doc.get("webpages"));
 		return new User(docId, name, url, webpages);
 	}
 	
@@ -66,7 +67,7 @@ public class Database {
 		int docId = doc.getInteger("docId", -1);
 		String name = doc.getString("name");
 		String url = doc.getString("url");
-		Set<String> users = (Set<String>) doc.get("users");
+		Set<String> users = new HashSet<String>((ArrayList<String>) doc.get("users"));
 		String content = doc.getString("content");
 		return new WebPage(docId, name, url, users, content);
 	}
@@ -96,6 +97,12 @@ public class Database {
 		return userList;	 
 	}
 	
+	public boolean userExists(String name) {
+		Document query = new Document("name", name);
+		FindIterable<Document> result = userCollection.find(query);
+		return result.first() != null;
+	}
+	
 	public WebPage getWebPage(String name) {
 		Document query = new Document("name", name);
 		FindIterable<Document> result = webpageCollection.find(query);
@@ -106,10 +113,14 @@ public class Database {
 		return null;
 	}
 	
-	public boolean userExists(String name) {
-		Document query = new Document("name", name);
-		FindIterable<Document> result = userCollection.find(query);
-		return result.first() != null;
+	public ArrayList<WebPage> getWebPages() {
+		ArrayList<Document> docs = (ArrayList<Document>) webpageCollection.find().into(new ArrayList<Document>());
+		System.out.println("Number of webpage documents: " + docs.size());
+		ArrayList<WebPage> webpageList = new ArrayList<WebPage>();
+		for (Document doc : docs) {
+			webpageList.add(deserializeWebPage(doc));
+		}
+		return webpageList;	 
 	}
 	
 	public static Database getInstance() {
