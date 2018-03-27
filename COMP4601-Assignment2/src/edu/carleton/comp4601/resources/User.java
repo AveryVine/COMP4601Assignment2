@@ -32,7 +32,7 @@ public class User {
 	}
 	
 	public String htmlTableData() {
-		return "<tr> <td> " + docId + " </td> <td> " + name + " </td> <td> " + url + " </td> </tr> ";
+		return "<tr> <td> " + docId + " </td> <td> " + name + " </td> <td> <a href='" + url + "'> " + url + " </a> </td> </tr> ";
 	}
 	
 	public static String htmlTableHeader() {
