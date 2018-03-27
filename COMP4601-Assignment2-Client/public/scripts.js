@@ -2,8 +2,6 @@ $(document).ready(function() {
 
     let baseURL = "http://localhost:8080/COMP4601-RS/rest/rs";
 
-    console.log("Test");
-
     $("#resetTraining").on('click', function() {
         reset("training");
     });
@@ -20,7 +18,8 @@ $(document).ready(function() {
 
     $("#context").on('click', function() {
         $.get(baseURL + "/context", function(data) {
-            alert("Context action performed: " + data.toString());
+            console.log("Context action performed: " + data.toString());
+            $("html").html(data);
         });
     });
 

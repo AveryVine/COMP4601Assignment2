@@ -1,14 +1,14 @@
 package edu.carleton.comp4601.resources;
 
-import java.util.Set;
+import java.util.ArrayList;
 
 public class WebPage {
 
 	int docId;
 	String name, url, content;
-	Set<String> users;
+	ArrayList<String> users;
 	
-	public WebPage(int docId, String name, String url, Set<String> users, String content) {
+	public WebPage(int docId, String name, String url, ArrayList<String> users, String content) {
 		this.docId = docId;
 		this.name = name;
 		this.url = url;
@@ -28,7 +28,7 @@ public class WebPage {
 		return url;
 	}
 	
-	public Set<String> getUsers() {
+	public ArrayList<String> getUsers() {
 		return users;
 	}
 	

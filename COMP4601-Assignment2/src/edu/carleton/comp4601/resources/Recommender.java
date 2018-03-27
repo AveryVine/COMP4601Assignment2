@@ -20,6 +20,7 @@ public class Recommender {
 
 	String name, authorName1, authorName2;
 	CrawlerController controller;
+	Clustering clustering;
 
 	public Recommender() {
 		authorName1 = "Avery Vine";
@@ -43,6 +44,8 @@ public class Recommender {
 		try {
 			controller = new CrawlerController(dir);
 			controller.crawl();
+//			clustering = new Clustering();
+//			clustering.run();
 		} catch (Exception e) {
 			System.err.println("Error crawling data in dir: " + dir);
 			e.printStackTrace();
@@ -56,7 +59,13 @@ public class Recommender {
 	@Produces(MediaType.TEXT_HTML)
 	public String context() {
 		System.out.println("context");
-		String res = "<html> <title> Context </title> <body> Context </body> </html>";
+		String res = "<html> <title> Context </title> <body> <table border='1px'> ";
+		res += User.htmlTableHeader();
+		for (User user : Database.getInstance().getUsers()) {
+			res += user.htmlTableData();
+		}
+		res += "</table> </body> </html>";
+		System.out.println("Finished constructing: " + res);
 		return res;
 	}
 	

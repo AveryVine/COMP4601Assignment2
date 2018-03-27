@@ -72,7 +72,7 @@ public class Crawler extends WebCrawler {
 			String text = htmlParseData.getText();
 			String html = htmlParseData.getHtml();
 			Set<WebURL> outgoingUrls = htmlParseData.getOutgoingUrls();
-			Set<String> links = new HashSet<String>();
+			ArrayList<String> links = new ArrayList<String>();
 			for (WebURL webUrl : outgoingUrls) {
 				links.add(webUrl.getAnchor());
 			}

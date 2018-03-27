@@ -6,7 +6,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import org.bson.Document;
 
@@ -57,7 +56,7 @@ public class Database {
 		int docId = doc.getInteger("docId", -1);
 		String name = doc.getString("name");
 		String url = doc.getString("url");
-		Set<String> webpages = (Set<String>) doc.get("webpages");
+		ArrayList<String> webpages = (ArrayList<String>) doc.get("webpages");
 		return new User(docId, name, url, webpages);
 	}
 	
@@ -66,7 +65,7 @@ public class Database {
 		int docId = doc.getInteger("docId", -1);
 		String name = doc.getString("name");
 		String url = doc.getString("url");
-		Set<String> users = (Set<String>) doc.get("users");
+		ArrayList<String> users = (ArrayList<String>) doc.get("users");
 		String content = doc.getString("content");
 		return new WebPage(docId, name, url, users, content);
 	}
