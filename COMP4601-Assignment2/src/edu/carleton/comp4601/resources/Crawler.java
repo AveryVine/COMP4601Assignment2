@@ -83,16 +83,18 @@ public class Crawler extends WebCrawler {
 			int docId = page.getWebURL().getDocid();
 			if (page.getWebURL().getURL().contains("pages")) {
 				System.out.println("Adding webpage");
-				WebPage webPage = new WebPage(docId, title);
+				WebPage webPage = new WebPage(docId, title, links);
 				Database.getInstance().insert(webPage);
 			} else if (page.getWebURL().getURL().contains("users")) {
 				System.out.println("Adding user");
-				User user = new User(docId, title);
-				Database.getInstance().insert(user);
+				if (title != "") {
+					User user = new User(docId, title, links);
+					Database.getInstance().insert(user);
+				}
 			} else {
 				System.out.println("Failed to classify crawled webpage");
 			}
-
+			
 			// Output for debugging purposes
 			System.out.println("Text length: " + text.length());
 			System.out.println("Html length: " + html.length());

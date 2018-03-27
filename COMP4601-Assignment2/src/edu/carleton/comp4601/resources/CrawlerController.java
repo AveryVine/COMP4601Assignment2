@@ -17,14 +17,14 @@ public class CrawlerController {
         config.setCrawlStorageFolder(crawlStorageFolder);
         config.setMaxDepthOfCrawling(maxDepthOfCrawling);
         config.setIncludeBinaryContentInCrawling(true);
-
+        
         PageFetcher pageFetcher = new PageFetcher(config);
         RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
         RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
         controller = new CrawlController(config, pageFetcher, robotstxtServer);
-
-        controller.addSeed("https://sikaman.dyndns.org/courses/4601/assignments/" + dir + "/pages/");
+        
         controller.addSeed("https://sikaman.dyndns.org/courses/4601/assignments/" + dir + "/users/");
+        controller.addSeed("https://sikaman.dyndns.org/courses/4601/assignments/" + dir + "/pages/");
         Database.getInstance();
     }
     
