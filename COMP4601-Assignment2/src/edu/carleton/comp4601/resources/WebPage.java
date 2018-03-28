@@ -5,15 +5,16 @@ import java.util.ArrayList;
 public class WebPage {
 
 	int docId;
-	String name, url, content;
+	String name, url, content, html;
 	ArrayList<String> users;
 	
-	public WebPage(int docId, String name, String url, ArrayList<String> users, String content) {
+	public WebPage(int docId, String name, String url, ArrayList<String> users, String content, String html) {
 		this.docId = docId;
 		this.name = name;
 		this.url = url;
 		this.users = users;
 		this.content = content;
+		this.html = html;
 	}
 	
 	public int getDocId() { 
@@ -34,6 +35,22 @@ public class WebPage {
 	
 	public String getContent() {
 		return content;
+	}
+	
+	public String getHTML() {
+		return html;
+	}
+	
+	public String htmlTableData(boolean setPrompts) {
+		if (setPrompts) {
+			return "<tr> <td> " + docId + " </td> <td> " + name + " </td> <td> <a onclick='parent.promptForUser(\"" + name + "\");' href='javascript:void(0);'> " + url + " </a> </td> </tr> ";
+		} else {
+			return "<tr> <td> " + docId + " </td> <td> " + name + " </td> <td> <a href='" + url + "'> " + url + " </a> </td> </tr> ";	
+		}
+	}
+	
+	public static String htmlTableHeader() {
+		return "<tr> <th> ID </th> <th> Name </th> <th> URL </th> </tr> ";
 	}
 	
 }

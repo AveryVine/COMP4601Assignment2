@@ -77,15 +77,17 @@ public class Crawler extends WebCrawler {
 
 			int docId = page.getWebURL().getDocid();
 			if (url.contains("pages")) {
-				System.out.println("Adding webpage");
-				//For WebPage, we should split up the content on the page per user and point user to that content. 
-				//Also, the way getUsersFromLinks works right is by filtering out all non-user links from the webpage. 
-				//Might want to preserve non-user links in a different way. 
-				WebPage webPage = new WebPage(docId, title, url, getUsersFromLinks(links), content); 
-				Database.getInstance().insert(webPage);
-			} else if (url.contains("users")) {
-				System.out.println("Adding user");
 				if (title != "" && !title.contains(" ")) {
+					System.out.println("Adding webpage");
+					//For WebPage, we should split up the content on the page per user and point user to that content. 
+					//Also, the way getUsersFromLinks works right is by filtering out all non-user links from the webpage. 
+					//Might want to preserve non-user links in a different way. 
+					WebPage webPage = new WebPage(docId, title, url, getUsersFromLinks(links), content, html); 
+					Database.getInstance().insert(webPage);
+				}
+			} else if (url.contains("users")) {
+				if (title != "" && !title.contains(" ")) {
+					System.out.println("Adding user");
 					User user = new User(docId, title, url, links);
 					Database.getInstance().insert(user);
 				}

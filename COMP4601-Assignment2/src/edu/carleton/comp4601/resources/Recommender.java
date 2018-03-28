@@ -32,7 +32,8 @@ public class Recommender {
 	@Produces(MediaType.TEXT_HTML)
 	public String getName() {
 		System.out.println("name");
-		return "<html> <title> " + name + " </title> <body> <h1> " + name + " </h1> </body> </html>";
+		String res = "<h1> " + name + " </h1>";
+		return wrapHTML(name, res);
 	}
 
 	@GET
@@ -59,14 +60,13 @@ public class Recommender {
 	@Produces(MediaType.TEXT_HTML)
 	public String context() {
 		System.out.println("context");
-		String res = "<html> <title> Context </title> <body> <table border='1px'> ";
+		String res = "<table border='1px'> ";
 		res += User.htmlTableHeader();
 		for (User user : Database.getInstance().getUsers()) {
 			res += user.htmlTableData();
 		}
-		res += "</table> </body> </html>";
-		System.out.println("Finished constructing: " + res);
-		return res;
+		res += "</table>";
+		return wrapHTML("Context", res);
 	}
 	
 	@GET
@@ -74,17 +74,33 @@ public class Recommender {
 	@Produces(MediaType.TEXT_HTML)
 	public String community() {
 		System.out.println("community");
-		String res = "<html> <title> Community </title> <body> Community </body> </html>";
-		return res;
+		String res = "Community";
+		return wrapHTML("Community", res);
+	}
+	
+	@GET
+	@Path("fetch")
+	@Produces(MediaType.TEXT_HTML)
+	public String fetch() {
+		System.out.println("fetch");
+		boolean setPrompts = true;
+		String res = "<table border> ";
+		res += WebPage.htmlTableHeader();
+		for (WebPage webpage: Database.getInstance().getWebPages()) {
+			res += webpage.htmlTableData(setPrompts);
+		}
+		res += " </table>";
+		return wrapHTML("Fetch", res);
 	}
 	
 	@GET
 	@Path("fetch/{user}/{page}")
 	@Produces(MediaType.TEXT_HTML)
-	public String context(@PathParam("user") String user, @PathParam("page") String page) {
+	public String fetch(@PathParam("user") String user, @PathParam("page") String page) {
 		System.out.println("fetch -> " + user + ", " + page);
-		String res = "<html> <title> Fetch </title> <body> Fetch </body> </html>";
-		return res;
+		String res = Database.getInstance().getWebPage(page).getHTML();
+		res = Advertiser.augment(res);
+		return wrapHTML("Fetch", res);
 	}
 	
 	@GET
@@ -92,33 +108,11 @@ public class Recommender {
 	@Produces(MediaType.TEXT_HTML)
 	public String advertising(@PathParam("category") String category) {
 		System.out.println("advertising -> " + category);
-		String res = "<html> <title> Advertising </title> <body> Adversiting </body> </html>";
-		return res;
+		String res = "Advertising";
+		return wrapHTML("Advertising", res);
 	}
 	
-	@GET
-	@Path("users")
-	@Produces(MediaType.TEXT_HTML)
-	public String userList() {
-		String res = "<html> <title> User List </title> <body> User List <table border='1'> <tr> <th> docId </th> <th> Name </th> <th> # pages visited </th> </tr> ";//</body> </html>";
-		
-		for (User user : Database.getInstance().getUsers()) {
-			res += "<tr> <th> " + user.getDocId() + "</th> <th> " + user.getName() + "</th> <th> " + user.getWebPages().size() + "</th> </tr>";
- 		}
-		res += "</table> </body> </html>";
-		return res;
-	}
-
-	@GET
-	@Path("pages")
-	@Produces(MediaType.TEXT_HTML)
-	public String pageList() {
-		String res = "<html> <title> Page List </title> <body> Page List <table border='1'> <tr> <th> docId </th> <th> Name </th> <th> # reviews </th> </tr> ";//</body> </html>";
-		
-		for (WebPage page : Database.getInstance().getWebPages()) {
-			res += "<tr> <th> " + page.getDocId() + "</th> <th> " + page.getName() + "</th> <th> " + page.getUsers().size() + "</th> </tr>";
- 		}
-		res += "</table> </body> </html>";
-		return res;
+	public String wrapHTML(String title, String body) {
+		return "<html> <head> <title> " + title + " </title> </head> <body> " + body + " </body> </html>";
 	}
 }

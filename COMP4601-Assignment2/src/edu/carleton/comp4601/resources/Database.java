@@ -48,6 +48,7 @@ public class Database {
 		doc.put("url", webpage.getUrl());
 		doc.put("users", webpage.getUsers());
 		doc.put("content", webpage.getContent());
+		doc.put("html", webpage.getHTML());
 		return doc;
 	}
 	
@@ -67,7 +68,8 @@ public class Database {
 		String url = doc.getString("url");
 		ArrayList<String> users = (ArrayList<String>) doc.get("users");
 		String content = doc.getString("content");
-		return new WebPage(docId, name, url, users, content);
+		String html = doc.getString("html");
+		return new WebPage(docId, name, url, users, content, html);
 	}
 
 	public void clear() {

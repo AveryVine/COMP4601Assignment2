@@ -1,44 +1,44 @@
 $(document).ready(function() {
 
-    let baseURL = "http://localhost:8080/COMP4601-RS/rest/rs";
-
     $("#resetTraining").on('click', function() {
-        reset("training");
+        $("#frame").attr("srcdoc", "<html><body></body></html>");
+        loadFrame("/reset/training");
     });
 
     $("#resetTesting").on('click', function() {
-        reset("testing");
-    })
-
-    function reset(dir) {
-        $.get(baseURL + "/reset/" + dir, function(data) {
-            alert("Reset action performed: " + data.toString());
-        });
-    }
+        $("#frame").attr("src", "about:blank");
+        loadFrame("/reset/testing");
+    });
 
     $("#context").on('click', function() {
-        $.get(baseURL + "/context", function(data) {
-            console.log("Context action performed: " + data.toString());
-            $("html").html(data);
-        });
+        loadFrame("/context");
     });
 
     $("#community").on('click', function() {
-        $.get(baseURL + "/community", function(data) {
-            alert("Community action performed: " + data.toString());
-        });
+        loadFrame("/community");
     });
 
     $("#fetch").on('click', function() {
-        $.get(baseURL + "/fetch", function(data) {
-            alert("Fetch action performed: " + data.toString());
-        });
+        loadFrame("/fetch");
     });
 
     $("#advertising").on('click', function() {
-        $.get(baseURL + "/advertising", function(data) {
-            alert("Advertising action performed: " + data.toString());
-        });
+        loadFrame("/advertising/test");
     });
 
 });
+
+let baseURL = "http://localhost:8080/COMP4601-RS/rest/rs";
+
+function loadFrame(frameURL) {
+    $.get(baseURL + frameURL, function(data) {
+        $("#frame").attr("srcdoc", data);
+    })
+}
+
+function promptForUser(page) {
+    var user = window.prompt("Enter the name of the user that is visiting this page.","");
+    if (user != null && user != "") {
+        loadFrame("/fetch/" + user + "/" + page);
+    }
+}
