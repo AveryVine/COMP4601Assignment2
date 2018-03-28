@@ -32,6 +32,7 @@ let baseURL = "http://localhost:8080/COMP4601-RS/rest/rs";
 
 function loadFrame(frameURL) {
     $.get(baseURL + frameURL, function(data) {
+        console.log(data);
         $("#frame").attr("srcdoc", data);
     })
 }

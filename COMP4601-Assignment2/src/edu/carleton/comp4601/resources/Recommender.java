@@ -99,6 +99,7 @@ public class Recommender {
 	public String fetch(@PathParam("user") String user, @PathParam("page") String page) {
 		System.out.println("fetch -> " + user + ", " + page);
 		String res = Database.getInstance().getWebPage(page).getHTML();
+		System.out.println(res);
 		res = Advertiser.augment(res);
 		return wrapHTML("Fetch", res);
 	}
