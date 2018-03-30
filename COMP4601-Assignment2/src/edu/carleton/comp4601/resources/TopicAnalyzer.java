@@ -21,11 +21,14 @@ public class TopicAnalyzer {
 	public static ArrayList<WebPage> FILE;
 	public static String STOP_FILE = "stop.txt";
 	public static String LIBSVM_FILE = "/Users/AveryVine/Documents/COMP4601_recommender_topic_data.txt";
+	public static String SAMPLE_FILE = "/Users/AveryVine/Documents/lda_libsvm_data.txt";
 	public static ArrayList<String> STOP_WORDS;
 	public static ArrayList<HashMap<String, Integer>> MAPS;
 	public static HashMap<String, Integer> MASTER;
 	public static ArrayList<Word> TERMS;
 	public static int MAX_TERMS = 5;
+	
+	public static boolean GENERATE_FILE = false;
 
 	public TopicAnalyzer() {
 		FILE = Database.getInstance().getWebPages();
@@ -35,14 +38,16 @@ public class TopicAnalyzer {
 	}
 	
 	public void analyze() {
-		System.out.println("Reading stop words...");
-		readStopWords();
-		System.out.println("Reading words...");
-		readWords();
-		System.out.println("Sorting terms...");
-		sortTerms();
-		System.out.println("Writing to file...");
-		writeToFile();
+		if (GENERATE_FILE) {
+			System.out.println("Reading stop words...");
+			readStopWords();
+			System.out.println("Reading words...");
+			readWords();
+			System.out.println("Sorting terms...");
+			sortTerms();
+			System.out.println("Writing to file...");
+			writeToFile();	
+		}
 		System.out.println("Calculating topics...");
 		determineTopics();
 	}
