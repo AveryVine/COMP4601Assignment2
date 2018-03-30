@@ -1,5 +1,7 @@
 package edu.carleton.comp4601.resources;
 
+import java.util.ArrayList;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -20,7 +22,7 @@ public class Recommender {
 
 	String name, authorName1, authorName2;
 	CrawlerController controller;
-	TopicAnalyzer analyzer;
+	SentimentAnalyzer sentimentAnalyzer;
 //	Clustering clustering;
 
 	public Recommender() {
@@ -61,8 +63,14 @@ public class Recommender {
 	@Produces(MediaType.TEXT_HTML)
 	public String context() {
 		System.out.println("context");
-		analyzer = new TopicAnalyzer();
-		analyzer.analyze();
+		sentimentAnalyzer = new SentimentAnalyzer();
+		
+		ArrayList<User> users = Database.getInstance().getUsers(); 
+		
+		for (User user : users) {
+			
+		}
+				
 		String res = "<table border='1px'> ";
 		res += User.htmlTableHeader();
 		for (User user : Database.getInstance().getUsers()) {

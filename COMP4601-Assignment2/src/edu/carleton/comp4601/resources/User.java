@@ -7,6 +7,7 @@ public class User {
 	private int docId;
 	private String name, url;
 	private ArrayList<String> webpages;
+	private ArrayList<Review> reviews;
 	
 	public User(int docId, String name, String url, ArrayList<String> webpages) {
 		this.docId = docId;
@@ -25,6 +26,20 @@ public class User {
 	
 	public String getUrl() {
 		return url;
+	}
+	
+	public void setReviewScore(int index, double score) {
+		if (index < reviews.size() && index >= 0) {
+			reviews.get(index).setScore(score);
+		}
+	}
+	
+	public void addReview(Review review) {
+		reviews.add(review);
+	}
+	
+	public ArrayList<Review> getReviews() {
+		return reviews;
 	}
 	
 	public ArrayList<String> getWebPages() {

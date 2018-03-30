@@ -17,6 +17,23 @@ public class WebPage {
 		this.html = html;
 	}
 	
+	public void setReviews() {
+		ArrayList<User> userList = new ArrayList<User>();
+		for (String user : users) {
+			User currUser = Database.getInstance().getUser(user);
+			if (currUser != null) {
+				//Database.getInstance().set
+			}
+		}
+	}
+	
+	public ArrayList<Review> getReviewsFromPageContent() {
+		for (String user : users) {
+			
+		}
+		return null;
+	}
+	
 	public int getDocId() { 
 		return docId;
 	}

@@ -38,6 +38,7 @@ public class Database {
 		doc.put("name", user.getName());
 		doc.put("url", user.getUrl());
 		doc.put("webpages", user.getWebPages());
+		doc.put("reviews", user.getReviews()); //might break here
 		return doc;
 	}
 	
@@ -95,6 +96,15 @@ public class Database {
 			userList.add(deserializeUser(doc));
 		}
 		return userList;	 
+	}
+	
+	public void setUsers(ArrayList<User> users) {
+		userCollection.drop();
+		userCollection = database.getCollection("userData");
+		
+		for (User user : users) {
+			insert(user);
+		}
 	}
 	
 	public WebPage getWebPage(String name) {
