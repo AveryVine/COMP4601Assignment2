@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class User {
 	
-	int docId;
-	String name, url;
-	ArrayList<String> webpages;
+	private int docId;
+	private String name, url;
+	private ArrayList<String> webpages;
 	
 	public User(int docId, String name, String url, ArrayList<String> webpages) {
 		this.docId = docId;

@@ -82,6 +82,7 @@ public class Crawler extends WebCrawler {
 					//For WebPage, we should split up the content on the page per user and point user to that content. 
 					//Also, the way getUsersFromLinks works right is by filtering out all non-user links from the webpage. 
 					//Might want to preserve non-user links in a different way. 
+					html = modifyHTMLLinks(html);
 					WebPage webPage = new WebPage(docId, title, url, getUsersFromLinks(links), content, html); 
 					Database.getInstance().insert(webPage);
 				}
@@ -105,11 +106,16 @@ public class Crawler extends WebCrawler {
 	public ArrayList<String> getUsersFromLinks(ArrayList<String> users) {
 		ArrayList<String> validUsers = new ArrayList<String>(); 
 		for (String user : users) {
-			if (Database.getInstance().userExists(user)) { //if user text is in database then confirm as real user
+			if (Database.getInstance().getUser(user) != null) { //if user text is in database then confirm as real user
 				validUsers.add(user);
 			}
 		}
 		
 		return validUsers;
+	}
+	
+	private String modifyHTMLLinks(String html) {
+//		html = html.replaceAll("../", CrawlerController.crawlBaseURL);
+		return html;
 	}
 }

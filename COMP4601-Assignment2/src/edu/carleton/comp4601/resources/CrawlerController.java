@@ -10,6 +10,7 @@ public class CrawlerController {
 	CrawlController controller;
 	int numberOfCrawlers = 7;
 	String crawlStorageFolder = "data/crawl/root";
+	public static String crawlBaseURL = "";
 	int maxDepthOfCrawling = 10;
 	
     public CrawlerController(String dir) throws Exception {
@@ -25,6 +26,8 @@ public class CrawlerController {
         
         controller.addSeed("https://sikaman.dyndns.org/courses/4601/assignments/" + dir + "/users/");
         controller.addSeed("https://sikaman.dyndns.org/courses/4601/assignments/" + dir + "/pages/");
+        
+        crawlBaseURL = "https://sikaman.dyndns.org/courses/4601/assignments/" + dir + "/";
         Database.getInstance();
     }
     

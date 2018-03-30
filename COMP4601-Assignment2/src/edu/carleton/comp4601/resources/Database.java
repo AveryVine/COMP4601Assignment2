@@ -97,12 +97,6 @@ public class Database {
 		return userList;	 
 	}
 	
-	public boolean userExists(String name) {
-		Document query = new Document("name", name);
-		FindIterable<Document> result = userCollection.find(query);
-		return result.first() != null;
-	}
-	
 	public WebPage getWebPage(String name) {
 		Document query = new Document("name", name);
 		FindIterable<Document> result = webpageCollection.find(query);
