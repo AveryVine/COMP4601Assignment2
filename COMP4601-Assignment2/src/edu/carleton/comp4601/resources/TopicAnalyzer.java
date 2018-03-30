@@ -110,7 +110,7 @@ public class TopicAnalyzer {
 			BufferedWriter file = new BufferedWriter(new FileWriter(new File(LIBSVM_FILE)), 32768);
 			for (int i = 0; i < FILE.size(); i++) {
 				file.write(Integer.toString(i));
-				for (int j = 0; j < TERMS.size(); j++) {
+				for (int j = 0; j < FILE.size() * 10; j++) {
 					file.write(" " + (j + 1) + ":" + getDocWordFreq(i, j));
 				}
 				file.write("\n");
