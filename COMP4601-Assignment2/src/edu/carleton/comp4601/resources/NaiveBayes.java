@@ -53,15 +53,16 @@ public abstract class NaiveBayes {
 	
 	public abstract void analyze();
 	
-	protected ArrayList<Double> processText(String text) {
+	protected ArrayList<BigDecimal> processText(String text) {
 		text = cleanText(text);
 		ArrayList<String> words = new ArrayList<String>(Arrays.asList(text.split(" ")));
 		
-		ArrayList<Double> scores = calculateClassScores(words);
+		ArrayList<BigDecimal> scores = calculateClassScores(words);
 		return scores;
 	}
 	
 	private void readStopWords() {
+		System.out.println("Reading stop words...");
 		File file = new File(trainingPath + "stopwords.txt");
 		Scanner scanner = null;
 		try {
@@ -96,6 +97,7 @@ public abstract class NaiveBayes {
 	}
 	
 	private void readClassText() {
+		System.out.println("Reading class text...");
 		totalClassDocs = 0;
 		for (int i = 0; i < classes.size(); i++) {
 			File classDirectory = new File(trainingPath + "/" + classes.get(i));
@@ -111,6 +113,7 @@ public abstract class NaiveBayes {
 	}
 	
 	private void calculateClassPriors() {
+		System.out.println("Calculating class priors...");
 		for (int i = 0; i < classes.size(); i++) {
 			classPriors.add((double) (((float) classTexts.get(i).size()) / ((float) totalClassDocs)));
 		}
@@ -118,6 +121,7 @@ public abstract class NaiveBayes {
 	}
 	
 	private void cleanClassTexts() {
+		System.out.println("Cleaning class texts...");
 		ArrayList<ArrayList<String>> cleanedClassTexts = new ArrayList<ArrayList<String>>();
 		for (ArrayList<String> classText : classTexts) {
 			ArrayList<String> cleanedClassText = new ArrayList<String>();
@@ -142,6 +146,7 @@ public abstract class NaiveBayes {
 	}
 	
 	private void determineTopWords() {
+		System.out.println("Determining top words...");
 		LinkedHashMap<String, Integer> tempTopWords = new LinkedHashMap<String, Integer>();
 		
 		for (int i = 0; i < classes.size(); i++) {
@@ -193,6 +198,7 @@ public abstract class NaiveBayes {
     }
 	
 	private void countClassValues() {
+		System.out.println("Counting class values...");
 		for (int i = 0; i < classes.size(); i++) {
 			int count = 0;
 			for (Integer value : classWordMaps.get(i).values()) {
@@ -207,6 +213,7 @@ public abstract class NaiveBayes {
 	}
 	
 	private void calculateConditionalWordProbabilities() {
+		System.out.println("Calculating conditional word probabilities...");
 		for (int i = 0; i < classes.size(); i++) {
 			HashMap<String, Double> classProbabilities = new HashMap<String, Double>();
 			LinkedHashMap<String, Integer> classWords = classWordMaps.get(i);
@@ -220,8 +227,8 @@ public abstract class NaiveBayes {
 		}
 	}
 	
-	protected ArrayList<Double> calculateClassScores(ArrayList<String> words) {
-		ArrayList<Double> classScores = new ArrayList<Double>();
+	protected ArrayList<BigDecimal> calculateClassScores(ArrayList<String> words) {
+		ArrayList<BigDecimal> classScores = new ArrayList<BigDecimal>();
 		for (int i = 0; i < classes.size(); i++) {
 			HashMap<String, Double> conditionalProbabilities = classConditionalProbabilities.get(i);
 			Double classPrior = classPriors.get(i);
@@ -234,7 +241,7 @@ public abstract class NaiveBayes {
 			}
 			probability = probability.multiply(BigDecimal.valueOf(classPrior));
 			//TODO: probabilities are getting so small that when they are converted to a double they become 0
-			classScores.add(probability.doubleValue());
+			classScores.add(probability);
 		}
 		return classScores;
 	}

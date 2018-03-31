@@ -1,5 +1,6 @@
 package edu.carleton.comp4601.resources;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -14,10 +15,10 @@ public class GenreAnalyzer extends NaiveBayes {
 		ArrayList<WebPage> webpages = Database.getInstance().getWebPages();
 		
 		for (WebPage webpage : webpages) {
-			ArrayList<Double> scores = processText(webpage.getContent());
+			ArrayList<BigDecimal> scores = processText(webpage.getContent());
 			int indexOfBestScore = -1;
 			for (int i = 0; i < scores.size(); i++) {
-				if (indexOfBestScore == -1 || scores.get(i) > scores.get(indexOfBestScore)) {
+				if (indexOfBestScore == -1 || scores.get(i).compareTo(scores.get(indexOfBestScore)) > 1) {
 					indexOfBestScore = i;
 				}
 			}
