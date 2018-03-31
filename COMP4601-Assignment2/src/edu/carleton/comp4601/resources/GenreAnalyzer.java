@@ -1,16 +1,15 @@
 package edu.carleton.comp4601.resources;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class GenreAnalyzer extends NaiveBayes {
+	
+	public static final ArrayList<String> GENRES = new ArrayList<String>(Arrays.asList("comedy", "thriller", "romance", "action", "drama"));
 
 	public GenreAnalyzer() {
-		super(new ArrayList<String>(Arrays.asList("comedy", "thriller", "romance", "action", "drama")));
+		super(GENRES);
 	}
 	
 	@Override

@@ -6,7 +6,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.UpdateOptions;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.bson.Document;
 
@@ -26,12 +28,11 @@ public class Database {
 	}
 	
 	public synchronized void insert(User user) {
-		userCollection.insertOne(serialize(user));
+		userCollection.replaceOne(new Document("docId", user.getDocId()), serialize(user), new UpdateOptions().upsert(true));
 	}
 	
 	public synchronized void insert(WebPage webpage) {
 		webpageCollection.replaceOne(new Document("docId", webpage.getDocId()), serialize(webpage), new UpdateOptions().upsert(true));
-//		webpageCollection.insertOne(serialize(webpage));
 	}
 	
 	public Document serialize(User user) {
@@ -39,7 +40,9 @@ public class Database {
 		doc.put("docId", user.getDocId());
 		doc.put("name", user.getName());
 		doc.put("url", user.getUrl());
+		doc.put("preferredGenre", user.getPreferredGenre());
 		doc.put("webpages", user.getWebPages());
+		doc.put("sentiments", user.getSentiments());
 		doc.put("reviews", user.getReviews()); //might break here
 		return doc;
 	}
@@ -61,8 +64,19 @@ public class Database {
 		int docId = doc.getInteger("docId", -1);
 		String name = doc.getString("name");
 		String url = doc.getString("url");
+		String preferredGenre = doc.getString("preferredGenre");
 		ArrayList<String> webpages = (ArrayList<String>) doc.get("webpages");
-		return new User(docId, name, url, webpages);
+		HashMap<String, ArrayList<String>> sentimentStrings = (HashMap<String, ArrayList<String>>) doc.get("sentiments");
+		HashMap<String, ArrayList<BigDecimal>> sentiments = new HashMap<String, ArrayList<BigDecimal>>();
+		for (String genre : sentimentStrings.keySet()) {
+			ArrayList<String> genreSentimentStrings = sentimentStrings.get(genre);
+			ArrayList<BigDecimal> genreSentiments = new ArrayList<BigDecimal>();
+			for (String sentiment : genreSentimentStrings) {
+				genreSentiments.add(new BigDecimal(sentiment));
+			}
+			sentiments.put(genre, genreSentiments);
+		}
+		return new User(docId, name, url, preferredGenre, webpages, sentiments);
 	}
 	
 	@SuppressWarnings("unchecked")

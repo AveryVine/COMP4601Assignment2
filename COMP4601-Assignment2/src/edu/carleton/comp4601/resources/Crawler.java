@@ -1,8 +1,11 @@
 package edu.carleton.comp4601.resources;
 
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -83,14 +86,19 @@ public class Crawler extends WebCrawler {
 					//Also, the way getUsersFromLinks works right is by filtering out all non-user links from the webpage. 
 					//Might want to preserve non-user links in a different way. 
 					html = modifyHTMLLinks(html);
-					String genre = "";
+					String genre = null;
 					WebPage webPage = new WebPage(docId, title, url, getUsersFromLinks(links), genre, content, html); 
 					Database.getInstance().insert(webPage);
 				}
 			} else if (url.contains("users")) {
 				if (title != "" && !title.contains(" ")) {
 					System.out.println("Adding user");
-					User user = new User(docId, title, url, links);
+					String preferredGenre = null;
+					HashMap<String, ArrayList<BigDecimal>> sentiments = new HashMap<String, ArrayList<BigDecimal>>();
+					for (String genre : GenreAnalyzer.GENRES) {
+						sentiments.put(genre, new ArrayList<BigDecimal>());
+					}
+					User user = new User(docId, title, url, preferredGenre, links, sentiments);
 					Database.getInstance().insert(user);
 				}
 			} else {

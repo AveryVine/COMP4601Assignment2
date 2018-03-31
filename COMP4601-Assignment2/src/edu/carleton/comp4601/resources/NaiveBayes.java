@@ -35,7 +35,8 @@ public abstract class NaiveBayes {
 	protected NaiveBayes(ArrayList<String> classes) {
 		this.classes = classes;
 		
-		trainingPath = "/Users/maximkuzmenko/Desktop/School/Third Year/First Semester/COMP 4601/COMP4601Assignment2/COMP4601-Assignment2/training/";
+//		trainingPath = "/Users/maximkuzmenko/Desktop/School/Third Year/First Semester/COMP 4601/COMP4601Assignment2/COMP4601-Assignment2/training/";
+		trainingPath = "/Users/AveryVine/Documents/School/Third Year/COMP4601/eclipse-workspace/COMP4601Assignment2/COMP4601-Assignment2/training/";
 		
 		classPriors = new ArrayList<Double>();
 		classTexts = new ArrayList<ArrayList<String>>();
@@ -150,7 +151,6 @@ public abstract class NaiveBayes {
 	
 	private void determineTopWords() {
 		System.out.println("Determining top words...");
-		LinkedHashMap<String, Integer> tempTopWords = new LinkedHashMap<String, Integer>();
 		ArrayList<LinkedHashMap<String, Integer>> tempClassWordMaps = new ArrayList<LinkedHashMap<String, Integer>>();
 		for (int i = 0; i < classes.size(); i++) {
 			ArrayList<String> classText = classTexts.get(i);
@@ -174,18 +174,6 @@ public abstract class NaiveBayes {
 			
 			tempClassWordMaps.add(sortedWordMap);
 		}
-		
-//		int count = 0;
-//		for (LinkedHashMap<String, Integer> map : tempClassWordMaps) {
-//			LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<String, Integer>();
-//			for (Entry<String, Integer> entry : map.entrySet()) {
-//				tempMap.put(entry.getKey(), entry.getValue());
-//				if (++count > totalClassDocs * 100) {
-//					break;
-//				}
-//			}
-//			classWordMaps.add(tempMap);
-//		}
 		
 		classWordMaps = onlyKeepMutualWords(tempClassWordMaps);
 		if (classWordMaps.size() > 0) {
@@ -282,7 +270,6 @@ public abstract class NaiveBayes {
 				}
 			}
 			probability = probability.multiply(BigDecimal.valueOf(classPrior));
-			//TODO: probabilities are getting so small that when they are converted to a double they become 0
 			classScores.add(probability);
 		}
 		return classScores;
