@@ -24,7 +24,7 @@ public class CrawlerController {
         RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
         controller = new CrawlController(config, pageFetcher, robotstxtServer);
         
-        //controller.addSeed("https://sikaman.dyndns.org/courses/4601/assignments/" + dir + "/users/");
+        controller.addSeed("https://sikaman.dyndns.org/courses/4601/assignments/" + dir + "/users/");
         controller.addSeed("https://sikaman.dyndns.org/courses/4601/assignments/" + dir + "/pages/");
         
         crawlBaseURL = "https://sikaman.dyndns.org/courses/4601/assignments/" + dir + "/";

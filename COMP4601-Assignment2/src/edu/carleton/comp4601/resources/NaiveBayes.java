@@ -281,7 +281,7 @@ public abstract class NaiveBayes {
 		return classes;
 	}
 	
-	protected static String format(BigDecimal x)
+	public static String format(BigDecimal x)
 	{
 	    NumberFormat formatter = new DecimalFormat("0.0E0");
 	    formatter.setRoundingMode(RoundingMode.HALF_UP);

@@ -43,7 +43,15 @@ public class Database {
 		doc.put("url", user.getUrl());
 		doc.put("preferredGenre", user.getPreferredGenre());
 		doc.put("webpages", user.getWebPages());
-		doc.put("sentiments", user.getSentiments());
+		HashMap<String, ArrayList<BigDecimal>> sentiments = user.getSentiments();
+		for (String genre : sentiments.keySet()) {
+			ArrayList<BigDecimal> genreSentiments = sentiments.get(genre);
+			ArrayList<String> genreSentimentStrings = new ArrayList<String>();
+			for (BigDecimal sentiment : genreSentiments) {
+				genreSentimentStrings.add(NaiveBayes.format(sentiment));
+			}
+			doc.put(genre, genreSentimentStrings);
+		}
 		doc.put("reviews", user.getReviews()); //might break here
 		return doc;
 	}
@@ -67,10 +75,9 @@ public class Database {
 		String url = doc.getString("url");
 		String preferredGenre = doc.getString("preferredGenre");
 		ArrayList<String> webpages = (ArrayList<String>) doc.get("webpages");
-		HashMap<String, ArrayList<String>> sentimentStrings = (HashMap<String, ArrayList<String>>) doc.get("sentiments");
 		HashMap<String, ArrayList<BigDecimal>> sentiments = new HashMap<String, ArrayList<BigDecimal>>();
-		for (String genre : sentimentStrings.keySet()) {
-			ArrayList<String> genreSentimentStrings = sentimentStrings.get(genre);
+		for (String genre : GenreAnalyzer.GENRES) {
+			ArrayList<String> genreSentimentStrings = (ArrayList<String>) doc.get(genre);
 			ArrayList<BigDecimal> genreSentiments = new ArrayList<BigDecimal>();
 			for (String sentiment : genreSentimentStrings) {
 				genreSentiments.add(new BigDecimal(sentiment));
@@ -93,7 +100,7 @@ public class Database {
 	}
 
 	public void clear() {
-		//userCollection.drop();
+		userCollection.drop();
 		webpageCollection.drop();
 	}
 	
