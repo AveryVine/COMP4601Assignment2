@@ -6,6 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -32,7 +35,7 @@ public abstract class NaiveBayes {
 	protected NaiveBayes(ArrayList<String> classes) {
 		this.classes = classes;
 		
-		trainingPath = "/Users/AveryVine/Documents/School/Third Year/COMP4601/eclipse-workspace/COMP4601Assignment2/COMP4601-Assignment2/training/";
+		trainingPath = "/Users/maximkuzmenko/Desktop/School/Third Year/First Semester/COMP 4601/COMP4601Assignment2/COMP4601-Assignment2/training/";
 		
 		classPriors = new ArrayList<Double>();
 		classTexts = new ArrayList<ArrayList<String>>();
@@ -148,10 +151,9 @@ public abstract class NaiveBayes {
 	private void determineTopWords() {
 		System.out.println("Determining top words...");
 		LinkedHashMap<String, Integer> tempTopWords = new LinkedHashMap<String, Integer>();
-		
+		ArrayList<LinkedHashMap<String, Integer>> tempClassWordMaps = new ArrayList<LinkedHashMap<String, Integer>>();
 		for (int i = 0; i < classes.size(); i++) {
 			ArrayList<String> classText = classTexts.get(i);
-			LinkedHashMap<String, Integer> classWordMap = new LinkedHashMap<String, Integer>();
 			
 			ArrayList<String> wordsToProcess = new ArrayList<String>();
 			for (String text : classText) {
@@ -170,19 +172,59 @@ public abstract class NaiveBayes {
 			
 			LinkedHashMap<String, Integer> sortedWordMap = new LinkedHashMap<String, Integer>(sortByValue(wordMap));
 			
-			classWordMap.putAll(sortedWordMap);
-			classWordMaps.add(classWordMap);
-			
-			tempTopWords.putAll(sortedWordMap);
+			tempClassWordMaps.add(sortedWordMap);
 		}
 		
-		for (Entry<String, Integer> entry : tempTopWords.entrySet()) {
-			topWords.put(entry.getKey(), entry.getValue());
-			if (topWords.size() > totalClassDocs * 10) {
-				totalVocabulary = topWords.size();
-				break;
+//		int count = 0;
+//		for (LinkedHashMap<String, Integer> map : tempClassWordMaps) {
+//			LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<String, Integer>();
+//			for (Entry<String, Integer> entry : map.entrySet()) {
+//				tempMap.put(entry.getKey(), entry.getValue());
+//				if (++count > totalClassDocs * 100) {
+//					break;
+//				}
+//			}
+//			classWordMaps.add(tempMap);
+//		}
+		
+		classWordMaps = onlyKeepMutualWords(tempClassWordMaps);
+		if (classWordMaps.size() > 0) {
+			totalVocabulary = classWordMaps.get(0).size();
+		}
+	}
+	
+	public ArrayList<LinkedHashMap<String, Integer>> onlyKeepMutualWords(ArrayList<LinkedHashMap<String, Integer>> mapList) {
+		HashSet<String> mutualWords = new HashSet<String>();
+		if (mapList.size() == 0) {
+			return mapList;
+		}
+		for (String key : mapList.get(0).keySet()) {
+			boolean canAdd = true;
+			for (int i = 1; i < mapList.size(); i++) {
+				LinkedHashMap<String, Integer> map = mapList.get(i);
+				if (!map.containsKey(key)) {
+					canAdd = false;
+					break;
+				}
+			}
+			if (canAdd) {
+				mutualWords.add(key);
 			}
 		}
+		
+		ArrayList<LinkedHashMap<String, Integer>> tempMapList = new ArrayList<LinkedHashMap<String, Integer>>();
+		
+		for (int i = 0; i < mapList.size(); i++) {
+			LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<String, Integer>(mapList.get(i));
+			for (String word : mapList.get(i).keySet()) {
+				if (!mutualWords.contains(word)) {
+					tempMap.remove(word);
+				}
+			}
+			tempMapList.add(tempMap);
+		}
+		
+		return tempMapList;
 	}
 	
 	private static <K, V extends Comparable<? super Integer>> LinkedHashMap<String, Integer> sortByValue(Map<String, Integer> map) {
@@ -209,7 +251,7 @@ public abstract class NaiveBayes {
 	}
 	
 	private int getCountOfWordInClass(String word, LinkedHashMap<String, Integer> classWords) {
-		return classWords.containsKey(word) ? classWords.get(word) : 0;
+		return classWords.containsKey(word) ? classWords.get(word) : 0; 
 	}
 	
 	private void calculateConditionalWordProbabilities() {
@@ -248,6 +290,15 @@ public abstract class NaiveBayes {
 	
 	public ArrayList<String> getClasses() {
 		return classes;
+	}
+	
+	protected static String format(BigDecimal x)
+	{
+	    NumberFormat formatter = new DecimalFormat("0.0E0");
+	    formatter.setRoundingMode(RoundingMode.HALF_UP);
+	    formatter.setMinimumFractionDigits((x.scale() > 0) ? x.precision() : x.scale());
+	    String str = formatter.format(x);
+	    return str.substring(0, 5) + str.substring(str.lastIndexOf("E"), str.length());
 	}
 
 }
