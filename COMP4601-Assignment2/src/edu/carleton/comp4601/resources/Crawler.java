@@ -83,7 +83,8 @@ public class Crawler extends WebCrawler {
 					//Also, the way getUsersFromLinks works right is by filtering out all non-user links from the webpage. 
 					//Might want to preserve non-user links in a different way. 
 					html = modifyHTMLLinks(html);
-					WebPage webPage = new WebPage(docId, title, url, getUsersFromLinks(links), content, html); 
+					String genre = "";
+					WebPage webPage = new WebPage(docId, title, url, getUsersFromLinks(links), genre, content, html); 
 					Database.getInstance().insert(webPage);
 				}
 			} else if (url.contains("users")) {

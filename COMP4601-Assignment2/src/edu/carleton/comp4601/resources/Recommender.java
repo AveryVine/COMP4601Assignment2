@@ -44,7 +44,6 @@ public class Recommender {
 	public Response reset(@PathParam("dir") String dir) {
 		System.out.println("reset -> " + dir);
 		Response res = Response.ok().build();
-		Database.getInstance().clear();
 		try {
 			controller = new CrawlerController(dir);
 //			controller.crawl();

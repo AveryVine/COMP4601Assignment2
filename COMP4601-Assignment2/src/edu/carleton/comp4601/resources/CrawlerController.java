@@ -32,6 +32,7 @@ public class CrawlerController {
     }
     
     public void crawl() {
+    		Database.getInstance().clear();
     		controller.start(Crawler.class, numberOfCrawlers);
     }
 }

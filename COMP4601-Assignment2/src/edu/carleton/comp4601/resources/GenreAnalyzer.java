@@ -22,6 +22,8 @@ public class GenreAnalyzer extends NaiveBayes {
 				}
 			}
 			webpage.setGenre(getClasses().get(indexOfBestScore));
+			System.out.println("Set genre of " + webpage.getName() + ": " + webpage.getGenre());
+			Database.getInstance().insert(webpage);
 		}
 	}
 

@@ -4,6 +4,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.UpdateOptions;
 
 import java.util.ArrayList;
 
@@ -29,7 +30,8 @@ public class Database {
 	}
 	
 	public synchronized void insert(WebPage webpage) {
-		webpageCollection.insertOne(serialize(webpage));
+		webpageCollection.replaceOne(new Document("docId", webpage.getDocId()), serialize(webpage), new UpdateOptions().upsert(true));
+//		webpageCollection.insertOne(serialize(webpage));
 	}
 	
 	public Document serialize(User user) {
@@ -48,6 +50,7 @@ public class Database {
 		doc.put("name", webpage.getName());
 		doc.put("url", webpage.getUrl());
 		doc.put("users", webpage.getUsers());
+		doc.put("genre", webpage.getGenre());
 		doc.put("content", webpage.getContent());
 		doc.put("html", webpage.getHTML());
 		return doc;
@@ -68,9 +71,10 @@ public class Database {
 		String name = doc.getString("name");
 		String url = doc.getString("url");
 		ArrayList<String> users = (ArrayList<String>) doc.get("users");
+		String genre = doc.getString("genre");
 		String content = doc.getString("content");
 		String html = doc.getString("html");
-		return new WebPage(docId, name, url, users, content, html);
+		return new WebPage(docId, name, url, users, genre, content, html);
 	}
 
 	public void clear() {

@@ -5,16 +5,16 @@ import java.util.ArrayList;
 public class WebPage {
 
 	private int docId;
-	private String name, url, content, genre, html;
+	private String name, url, genre, content, html;
 	private ArrayList<String> users;
 	
-	public WebPage(int docId, String name, String url, ArrayList<String> users, String content, String html) {
+	public WebPage(int docId, String name, String url, ArrayList<String> users, String genre, String content, String html) {
 		this.docId = docId;
 		this.name = name;
 		this.url = url;
 		this.users = users;
+		this.genre = genre;
 		this.content = content;
-		this.genre = "";
 		this.html = html;
 	}
 	
@@ -29,9 +29,6 @@ public class WebPage {
 	}
 	
 	public ArrayList<Review> getReviewsFromPageContent() {
-		for (String user : users) {
-			
-		}
 		return null;
 	}
 	
@@ -51,16 +48,16 @@ public class WebPage {
 		return users;
 	}
 	
-	public String getContent() {
-		return content;
-	}
-	
 	public void setGenre(String genre) {
 		this.genre = genre;
 	}
 	
 	public String getGenre() {
 		return genre;
+	}
+	
+	public String getContent() {
+		return content;
 	}
 	
 	public String getHTML() {

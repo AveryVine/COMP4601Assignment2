@@ -1,7 +1,10 @@
 package edu.carleton.comp4601.resources;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +40,7 @@ public abstract class NaiveBayes {
 		topWords = new LinkedHashMap<String, Integer>();
 		classWordMaps = new ArrayList<LinkedHashMap<String, Integer>>();
 		classConditionalProbabilities = new ArrayList<HashMap<String, Double>>();
+		stopWords = new HashSet<String>();
 		
 		readStopWords();
 		readClassText();
@@ -78,9 +82,14 @@ public abstract class NaiveBayes {
 	@SuppressWarnings("resource")
 	private String readClassFile(File file) {
 		String content = "";
+		
 		try {
-			content = new Scanner(file).useDelimiter("\\Z").next();
-		} catch (FileNotFoundException e) {
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			String line;
+			while ((line = reader.readLine()) != null) {
+				content += line;
+			}
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return content;
@@ -92,8 +101,10 @@ public abstract class NaiveBayes {
 			File classDirectory = new File(trainingPath + "/" + classes.get(i));
 			ArrayList<String> classText = new ArrayList<String>();
 			for (File file : classDirectory.listFiles()) {
-				classText.add(readClassFile(file));
-				totalClassDocs++;
+				if (file.getAbsolutePath().contains(".html")) {
+					classText.add(readClassFile(file));
+					totalClassDocs++;
+				}
 			}
 			classTexts.add(classText);
 		}
@@ -119,11 +130,11 @@ public abstract class NaiveBayes {
 	}
 	
 	protected String cleanText(String text) {
-		List<String> textList = Arrays.asList(text.replaceAll("\n", "").split(" "));
+		List<String> textList = Arrays.asList(text.split(" "));
 		List<String> removedTextList = new ArrayList<String>();
 		for (int i = 0; i < textList.size(); i++) {
 			String currTextWord = textList.get(i);
-			if (!stopWords.contains(currTextWord) && !currTextWord.matches("^.*[^a-zA-Z0-9 ].*$")) {
+			if (!stopWords.contains(currTextWord) && !currTextWord.matches("^.*[^a-zA-Z0-9 ].*$") && !currTextWord.equals("")) {
 				removedTextList.add(textList.get(i));
 			}
 		}
@@ -153,7 +164,10 @@ public abstract class NaiveBayes {
 			}
 			
 			LinkedHashMap<String, Integer> sortedWordMap = new LinkedHashMap<String, Integer>(sortByValue(wordMap));
+			
 			classWordMap.putAll(sortedWordMap);
+			classWordMaps.add(classWordMap);
+			
 			tempTopWords.putAll(sortedWordMap);
 		}
 		
@@ -193,8 +207,8 @@ public abstract class NaiveBayes {
 	}
 	
 	private void calculateConditionalWordProbabilities() {
-		HashMap<String, Double> classProbabilities = new HashMap<String, Double>();
 		for (int i = 0; i < classes.size(); i++) {
+			HashMap<String, Double> classProbabilities = new HashMap<String, Double>();
 			LinkedHashMap<String, Integer> classWords = classWordMaps.get(i);
 			double denominator = classValues.get(i) + totalVocabulary; 
 			for (String word: classWords.keySet()) {
@@ -219,6 +233,7 @@ public abstract class NaiveBayes {
 				}
 			}
 			probability = probability.multiply(BigDecimal.valueOf(classPrior));
+			//TODO: probabilities are getting so small that when they are converted to a double they become 0
 			classScores.add(probability.doubleValue());
 		}
 		return classScores;
