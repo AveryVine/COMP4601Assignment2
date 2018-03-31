@@ -1,7 +1,5 @@
 package edu.carleton.comp4601.resources;
 
-import java.util.ArrayList;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -23,7 +21,6 @@ public class Recommender {
 	String name, authorName1, authorName2;
 	CrawlerController controller;
 	NaiveBayes sentimentAnalyzer, genreAnalyzer;
-//	Clustering clustering;
 
 	public Recommender() {
 		authorName1 = "Avery Vine";
@@ -46,18 +43,9 @@ public class Recommender {
 		Response res = Response.ok().build();
 		try {
 			controller = new CrawlerController(dir);
-	//		controller.crawl();
+			controller.crawl();
 			genreAnalyzer = new GenreAnalyzer();
 			genreAnalyzer.analyze();
-			
-			ArrayList<ArrayList<Double>> userPreferences = new ArrayList<ArrayList<Double>>();
-			
-			for (WebPage webPage : Database.getInstance().getWebPages()) {
-				
-			}
-			
-//			clustering = new Clustering();
-//			clustering.run();
 		} catch (Exception e) {
 			System.err.println("Error crawling data in dir: " + dir);
 			e.printStackTrace();

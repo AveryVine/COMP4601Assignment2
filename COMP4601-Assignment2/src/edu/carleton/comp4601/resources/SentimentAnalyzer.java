@@ -16,13 +16,36 @@ public class SentimentAnalyzer extends NaiveBayes {
 	@Override
 	public void analyze() {
 		//TODO: use the processText(text) method to analyze text for sentiment
+		
+		ArrayList<User> dbUsers = Database.getInstance().getUsers();
+		HashMap<String, User> users = new HashMap<String, User>();
+		for (User user : dbUsers) {
+			users.put(user.getName(), user);
+		}
+		
 		for (WebPage webPage : Database.getInstance().getWebPages()) {
 			HashMap<String, String> reviews = getReviewsFromPage(webPage);
 			
 			for (Entry<String, String> entry : reviews.entrySet()) {
 				ArrayList<BigDecimal> scores = processText(entry.getValue());
 				
+				BigDecimal positiveScore = scores.get(0);
+				BigDecimal negativeScore = scores.get(1);
+				BigDecimal finalScore;
+				if (positiveScore.compareTo(negativeScore) == 1) {
+					finalScore = positiveScore.divide(negativeScore);
+				}
+				else {
+					finalScore = negativeScore.divide(positiveScore).multiply(BigDecimal.valueOf(-1));
+				}
+								
+				User user = users.get(entry.getKey());
+				user.addGenreSentiment(webPage.getGenre(), finalScore);
 			}
+		}
+		for (User user : users.values()) {
+			user.calculatePreferredGenre();
+			Database.getInstance().insert(user);
 		}
 	}
 	

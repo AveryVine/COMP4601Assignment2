@@ -10,9 +10,11 @@ import java.util.Arrays;
 import org.jsoup.Jsoup;
 
 public class GenreAnalyzer extends NaiveBayes {
+	
+	public static final ArrayList<String> GENRES = new ArrayList<String>(Arrays.asList("comedy", "thriller", "romance", "action", "drama"));
 
 	public GenreAnalyzer() {
-		super(new ArrayList<String>(Arrays.asList("comedy", "thriller", "romance", "action", "drama")));
+		super(GENRES);
 	}
 	
 	@Override
