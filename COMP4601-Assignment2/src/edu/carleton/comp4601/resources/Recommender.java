@@ -49,6 +49,13 @@ public class Recommender {
 	//		controller.crawl();
 			genreAnalyzer = new GenreAnalyzer();
 			genreAnalyzer.analyze();
+			
+			ArrayList<ArrayList<Double>> userPreferences = new ArrayList<ArrayList<Double>>();
+			
+			for (WebPage webPage : Database.getInstance().getWebPages()) {
+				
+			}
+			
 //			clustering = new Clustering();
 //			clustering.run();
 		} catch (Exception e) {

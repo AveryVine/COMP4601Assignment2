@@ -3,6 +3,7 @@ package edu.carleton.comp4601.resources;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -12,6 +13,7 @@ import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
 import org.apache.tika.sax.BodyContentHandler;
+import org.jsoup.Jsoup;
 import org.xml.sax.ContentHandler;
 
 import edu.uci.ics.crawler4j.crawler.Page;
@@ -58,7 +60,7 @@ public class Crawler extends WebCrawler {
 			Parser parser = new AutoDetectParser();
 			parser.parse(input, contentHandler, metadata, parseContext);
 			title = metadata.get(Metadata.TITLE);
-			content = contentHandler.toString();
+			content = Jsoup.parse(contentHandler.toString()).text().trim().replaceAll(" +", " ");
 			input.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -104,8 +106,8 @@ public class Crawler extends WebCrawler {
 		}
 	}
 	
-	public ArrayList<String> getUsersFromLinks(ArrayList<String> users) {
-		ArrayList<String> validUsers = new ArrayList<String>(); 
+	public HashSet<String> getUsersFromLinks(ArrayList<String> users) {
+		HashSet<String> validUsers = new HashSet<String>(); 
 		for (String user : users) {
 			if (Database.getInstance().getUser(user) != null) { //if user text is in database then confirm as real user
 				validUsers.add(user);

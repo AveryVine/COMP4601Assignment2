@@ -7,6 +7,8 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.jsoup.Jsoup;
+
 public class GenreAnalyzer extends NaiveBayes {
 
 	public GenreAnalyzer() {
@@ -29,7 +31,7 @@ public class GenreAnalyzer extends NaiveBayes {
 			}
 			webpage.setGenre(getClasses().get(indexOfBestScore));
 			System.out.println("Set genre of " + webpage.getName() + ": " + webpage.getGenre());
-			Database.getInstance().insert(webpage);
+			Database.getInstance().insert(webpage);			
 		}
 	}
 

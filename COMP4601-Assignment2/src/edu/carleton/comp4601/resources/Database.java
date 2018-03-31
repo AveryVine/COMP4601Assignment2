@@ -26,12 +26,12 @@ public class Database {
 	}
 	
 	public synchronized void insert(User user) {
-		userCollection.insertOne(serialize(user));
+		userCollection.replaceOne(new Document("docId", user.getDocId()), serialize(user), new UpdateOptions().upsert(true));
+		//userCollection.insertOne(serialize(user));
 	}
 	
 	public synchronized void insert(WebPage webpage) {
 		webpageCollection.replaceOne(new Document("docId", webpage.getDocId()), serialize(webpage), new UpdateOptions().upsert(true));
-//		webpageCollection.insertOne(serialize(webpage));
 	}
 	
 	public Document serialize(User user) {
@@ -40,7 +40,7 @@ public class Database {
 		doc.put("name", user.getName());
 		doc.put("url", user.getUrl());
 		doc.put("webpages", user.getWebPages());
-		doc.put("reviews", user.getReviews()); //might break here
+		doc.put("reviews", user.getReviews());
 		return doc;
 	}
 	

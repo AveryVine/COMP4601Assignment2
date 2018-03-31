@@ -1,14 +1,17 @@
 package edu.carleton.comp4601.resources;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 
 public class WebPage {
 
 	private int docId;
 	private String name, url, genre, content, html;
-	private ArrayList<String> users;
+	private HashSet<String> users;
 	
-	public WebPage(int docId, String name, String url, ArrayList<String> users, String genre, String content, String html) {
+	public WebPage(int docId, String name, String url, HashSet<String> users, String genre, String content, String html) {
 		this.docId = docId;
 		this.name = name;
 		this.url = url;
@@ -28,7 +31,14 @@ public class WebPage {
 		}
 	}
 	
-	public ArrayList<Review> getReviewsFromPageContent() {
+//	public ArrayList<Review> getReviewsFromPageContent() {
+//		return null;
+//	}
+	
+	public ArrayList<String> getReviewsFromPageContent() {
+		
+		
+		
 		return null;
 	}
 	
@@ -44,7 +54,7 @@ public class WebPage {
 		return url;
 	}
 	
-	public ArrayList<String> getUsers() {
+	public HashSet<String> getUsers() {
 		return users;
 	}
 	

@@ -136,7 +136,9 @@ public abstract class NaiveBayes {
 		classTexts = cleanedClassTexts;
 	}
 	
-	protected String cleanText(String text) {
+	protected String cleanText(String text) {		
+		text = text.toLowerCase().replaceAll("[^A-Za-z0-9 ]", " ").trim().replaceAll(" +", " ");
+		
 		List<String> textList = Arrays.asList(text.split(" "));
 		List<String> removedTextList = new ArrayList<String>();
 		for (int i = 0; i < textList.size(); i++) {
@@ -174,18 +176,6 @@ public abstract class NaiveBayes {
 			
 			tempClassWordMaps.add(sortedWordMap);
 		}
-		
-//		int count = 0;
-//		for (LinkedHashMap<String, Integer> map : tempClassWordMaps) {
-//			LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<String, Integer>();
-//			for (Entry<String, Integer> entry : map.entrySet()) {
-//				tempMap.put(entry.getKey(), entry.getValue());
-//				if (++count > totalClassDocs * 100) {
-//					break;
-//				}
-//			}
-//			classWordMaps.add(tempMap);
-//		}
 		
 		classWordMaps = onlyKeepMutualWords(tempClassWordMaps);
 		if (classWordMaps.size() > 0) {
