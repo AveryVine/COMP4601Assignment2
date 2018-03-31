@@ -47,7 +47,7 @@ public class Recommender {
 		Database.getInstance().clear();
 		try {
 			controller = new CrawlerController(dir);
-			controller.crawl();
+//			controller.crawl();
 			genreAnalyzer = new GenreAnalyzer();
 			genreAnalyzer.analyze();
 //			clustering = new Clustering();

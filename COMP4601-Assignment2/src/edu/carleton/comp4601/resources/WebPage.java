@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class WebPage {
 
 	private int docId;
-	private String name, url, content, html;
+	private String name, url, content, genre, html;
 	private ArrayList<String> users;
 	
 	public WebPage(int docId, String name, String url, ArrayList<String> users, String content, String html) {
@@ -14,6 +14,7 @@ public class WebPage {
 		this.url = url;
 		this.users = users;
 		this.content = content;
+		this.genre = "";
 		this.html = html;
 	}
 	
@@ -52,6 +53,14 @@ public class WebPage {
 	
 	public String getContent() {
 		return content;
+	}
+	
+	public void setGenre(String genre) {
+		this.genre = genre;
+	}
+	
+	public String getGenre() {
+		return genre;
 	}
 	
 	public String getHTML() {

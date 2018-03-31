@@ -11,7 +11,7 @@ public class SentimentAnalyzer extends NaiveBayes {
 	
 	@Override
 	public void analyze() {
-		//TODO: use the processScores(text) method to analyze text for sentiment
+		//TODO: use the processText(text) method to analyze text for sentiment
 	}
 
 }
