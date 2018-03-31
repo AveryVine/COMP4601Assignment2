@@ -22,7 +22,7 @@ public class Recommender {
 
 	String name, authorName1, authorName2;
 	CrawlerController controller;
-	SentimentAnalyzer sentimentAnalyzer;
+	NaiveBayes sentimentAnalyzer, genreAnalyzer;
 //	Clustering clustering;
 
 	public Recommender() {
@@ -48,6 +48,8 @@ public class Recommender {
 		try {
 			controller = new CrawlerController(dir);
 			controller.crawl();
+			genreAnalyzer = new GenreAnalyzer();
+			genreAnalyzer.analyze();
 //			clustering = new Clustering();
 //			clustering.run();
 		} catch (Exception e) {
@@ -64,12 +66,7 @@ public class Recommender {
 	public String context() {
 		System.out.println("context");
 		sentimentAnalyzer = new SentimentAnalyzer();
-		
-		ArrayList<User> users = Database.getInstance().getUsers(); 
-		
-		for (User user : users) {
-			
-		}
+		sentimentAnalyzer.analyze();
 				
 		String res = "<table border='1px'> ";
 		res += User.htmlTableHeader();
