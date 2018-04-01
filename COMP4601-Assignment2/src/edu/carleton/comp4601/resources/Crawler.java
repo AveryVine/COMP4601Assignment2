@@ -120,9 +120,4 @@ public class Crawler extends WebCrawler {
 		
 		return validUsers;
 	}
-	
-	private String modifyHTMLLinks(String html) {
-//		html = html.replaceAll("../", CrawlerController.crawlBaseURL);
-		return html;
-	}
 }

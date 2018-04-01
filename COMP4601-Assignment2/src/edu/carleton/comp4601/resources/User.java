@@ -1,6 +1,7 @@
 package edu.carleton.comp4601.resources;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -51,9 +52,9 @@ public class User {
 			ArrayList<BigDecimal> genreSentiments = sentiments.get(genre);
 			if (genreSentiments.size() > 0) {
 				for (BigDecimal sentiment : genreSentiments) {
-					genreTotal.add(sentiment);
+					genreTotal = genreTotal.add(sentiment);
 				}
-				genreTotal = genreTotal.divide(BigDecimal.valueOf(genreSentiments.size()));
+				genreTotal = genreTotal.divide(BigDecimal.valueOf(genreSentiments.size()), MathContext.DECIMAL128);
 				if (preferredGenreSentiment == null || genreTotal.compareTo(preferredGenreSentiment) == 1) {
 					preferredGenreSentiment = genreTotal;
 					preferredGenre = genre;
