@@ -22,12 +22,22 @@ public class Recommender {
 	CrawlerController controller;
 	NaiveBayes sentimentAnalyzer, genreAnalyzer;
 
+	/*
+	 * Description: constructor for the recommender class
+	 * Input: none
+	 * Return: none
+	 */
 	public Recommender() {
 		authorName1 = "Avery Vine";
 		authorName2 = "Maxim Kuzmenko";
 		name = "COMP4601 Assignment 2 Recommender System: " + authorName1 + " and " + authorName2;
 	}
 
+	/*
+	 * Description: gets the name of the recommender system
+	 * Input: none
+	 * Return: html representation of the name
+	 */
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String getName() {
@@ -36,6 +46,11 @@ public class Recommender {
 		return wrapHTML(name, res);
 	}
 
+	/*
+	 * Description: reset the recommender system by wiping the database, crawling the pages, and analyzing page genres
+	 * Input: the directory of the pages to crawl
+	 * Return: 200 response code if successful, 500 otherwise
+	 */
 	@GET
 	@Path("reset/{dir}")
 	public Response reset(@PathParam("dir") String dir) {
@@ -43,7 +58,7 @@ public class Recommender {
 		Response res = Response.ok().build();
 		try {
 			controller = new CrawlerController(dir);
-			controller.crawl();
+//			controller.crawl();
 			genreAnalyzer = new GenreAnalyzer();
 			genreAnalyzer.analyze();
 		} catch (Exception e) {
@@ -54,6 +69,11 @@ public class Recommender {
 		return res;
 	}
 	
+	/*
+	 * Description: calculates sentiments for users' reviews and groups users into communities based off preferred genre
+	 * Input: none
+	 * Return: html representation of the users and the fields used for community calculation
+	 */
 	@GET
 	@Path("context")
 	@Produces(MediaType.TEXT_HTML)
@@ -71,6 +91,11 @@ public class Recommender {
 		return wrapHTML("Context", res);
 	}
 	
+	/*
+	 * Description: 
+	 * Input: 
+	 * Return: 
+	 */
 	@GET
 	@Path("community")
 	@Produces(MediaType.TEXT_HTML)
@@ -80,6 +105,11 @@ public class Recommender {
 		return wrapHTML("Community", res);
 	}
 	
+	/*
+	 * Description: retrieves the list of webpages
+	 * Input: none
+	 * Return: html representation of the list of webpages
+	 */
 	@GET
 	@Path("fetch")
 	@Produces(MediaType.TEXT_HTML)
@@ -95,6 +125,11 @@ public class Recommender {
 		return wrapHTML("Fetch", res);
 	}
 	
+	/*
+	 * Description: fetches a particular page from the point of view of a particular user
+	 * Input: the user accessing the page, the page to access
+	 * Return: html representation of the page, augmented with ads relevant to the user and the page
+	 */
 	@GET
 	@Path("fetch/{user}/{page}")
 	@Produces(MediaType.TEXT_HTML)
@@ -106,6 +141,11 @@ public class Recommender {
 		//return wrapHTML("Fetch", res);
 	}
 	
+	/*
+	 * Description: 
+	 * Input: 
+	 * Return: 
+	 */
 	@GET
 	@Path("advertising/{category}")
 	@Produces(MediaType.TEXT_HTML)
@@ -115,6 +155,11 @@ public class Recommender {
 		return wrapHTML("Advertising", res);
 	}
 	
+	/*
+	 * Description: wraps the body of an html document with the required tags
+	 * Input: the title of the page, the body of the page
+	 * Return: the wrapped page
+	 */
 	public String wrapHTML(String title, String body) {
 		return "<html> <head> <title> " + title + " </title> </head> <body> " + body + " </body> </html>";
 	}

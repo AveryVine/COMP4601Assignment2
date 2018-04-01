@@ -46,7 +46,7 @@ public class SentimentAnalyzer extends NaiveBayes {
 				}
 				System.out.println("Adding sentiment to user...");
 				User user = users.get(entry.getKey());
-				user.addGenreSentiment(webpage.getGenre(), finalScore);
+				user.addGenreSentiment(webpage.getGenre(), webpage.getName(), finalScore);
 			}
 		}
 		System.out.println("Updating user preferences...");
