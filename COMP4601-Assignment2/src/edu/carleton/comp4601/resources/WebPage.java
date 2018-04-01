@@ -1,9 +1,6 @@
 package edu.carleton.comp4601.resources;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 
 public class WebPage {
 
@@ -19,27 +16,6 @@ public class WebPage {
 		this.genre = genre;
 		this.content = content;
 		this.html = html;
-	}
-	
-	public void setReviews() {
-		ArrayList<User> userList = new ArrayList<User>();
-		for (String user : users) {
-			User currUser = Database.getInstance().getUser(user);
-			if (currUser != null) {
-				//Database.getInstance().set
-			}
-		}
-	}
-	
-//	public ArrayList<Review> getReviewsFromPageContent() {
-//		return null;
-//	}
-	
-	public ArrayList<String> getReviewsFromPageContent() {
-		
-		
-		
-		return null;
 	}
 	
 	public int getDocId() { 
