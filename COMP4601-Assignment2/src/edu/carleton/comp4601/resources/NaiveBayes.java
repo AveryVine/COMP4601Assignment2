@@ -107,7 +107,7 @@ public abstract class NaiveBayes {
 			File classDirectory = new File(trainingPath + "/" + classes.get(i));
 			ArrayList<String> classText = new ArrayList<String>();
 			for (File file : classDirectory.listFiles()) {
-				if (file.getAbsolutePath().contains(".html")) {
+				if (file.getAbsolutePath().contains(".html") || file.getAbsolutePath().contains(".txt")) {
 					classText.add(readClassFile(file));
 					totalClassDocs++;
 				}
