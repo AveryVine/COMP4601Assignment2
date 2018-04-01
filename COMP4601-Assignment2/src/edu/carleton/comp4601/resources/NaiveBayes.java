@@ -280,14 +280,5 @@ public abstract class NaiveBayes {
 	public ArrayList<String> getClasses() {
 		return classes;
 	}
-	
-	public static String format(BigDecimal x)
-	{
-	    NumberFormat formatter = new DecimalFormat("0.0E0");
-	    formatter.setRoundingMode(RoundingMode.HALF_UP);
-	    formatter.setMinimumFractionDigits((x.scale() > 0) ? x.precision() : x.scale());
-	    String str = formatter.format(x);
-	    return str.substring(0, 5) + str.substring(str.lastIndexOf("E"), str.length());
-	}
 
 }

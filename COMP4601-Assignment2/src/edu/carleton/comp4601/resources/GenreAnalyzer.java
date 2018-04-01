@@ -29,7 +29,7 @@ public class GenreAnalyzer extends NaiveBayes {
 				if (indexOfBestScore == -1 || scores.get(i).compareTo(scores.get(indexOfBestScore)) == 1) {
 					indexOfBestScore = i;
 				}
-				output.add(getClasses().get(i) + " score for page " + webpage.getName() + " is " + format(scores.get(i)));
+				output.add(getClasses().get(i) + " score for page " + webpage.getName() + " is " + scores.get(i).toEngineeringString());
 			}
 			webpage.setGenre(getClasses().get(indexOfBestScore));
 			System.out.println("Set genre of " + webpage.getName() + ": " + webpage.getGenre());
