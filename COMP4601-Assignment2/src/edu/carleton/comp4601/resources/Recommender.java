@@ -76,7 +76,16 @@ public class Recommender {
 	@Produces(MediaType.TEXT_HTML)
 	public String community() {
 		System.out.println("community");
-		String res = "Community";
+		String res = "<div>Community</div> <table border>";
+		for (String genre : GenreAnalyzer.GENRES) {
+			String usersInCommunity = "";
+			for (User user : Database.getInstance().getUsersByPreferredGenre(genre)) { 
+				usersInCommunity += user.getName() + ", ";
+			}
+			res += "<tr> <td> " + genre + " </td> <td> " + usersInCommunity.substring(0, usersInCommunity.length() - 2) + " </td> </tr>";
+		}
+		res += " </table>";
+		
 		return wrapHTML("Community", res);
 	}
 	
@@ -103,7 +112,6 @@ public class Recommender {
 		String res = Advertiser.augment(user, page);
 		System.out.println(res);
 		return res;
-		//return wrapHTML("Fetch", res);
 	}
 	
 	@GET
@@ -111,7 +119,13 @@ public class Recommender {
 	@Produces(MediaType.TEXT_HTML)
 	public String advertising(@PathParam("category") String category) {
 		System.out.println("advertising -> " + category);
-		String res = "Advertising";
+		String res;
+		if (GenreAnalyzer.GENRES.contains(category.toLowerCase())) {
+			res = "Advertising for " + category;
+		}
+		else {
+			res = "Invalid genre " + category;
+		}
 		return wrapHTML("Advertising", res);
 	}
 	

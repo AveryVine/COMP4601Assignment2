@@ -114,6 +114,20 @@ public class Database {
 		return users;	 
 	}
 	
+	public ArrayList<User> getUsersByPreferredGenre(String genre) {
+		genre = genre.toLowerCase();
+		if (!GenreAnalyzer.GENRES.contains(genre)) {
+			return null;
+		}
+		Document query = new Document("preferredGenre", genre);
+		FindIterable<Document> docs = userCollection.find(query);
+		ArrayList<User> users = new ArrayList<User>();
+		for (Document doc : docs) {
+			users.add(deserializeUser(doc));
+		}
+		return users;
+	}
+	
 	public void setUsers(ArrayList<User> users) {
 		userCollection.drop();
 		userCollection = database.getCollection("userData");
