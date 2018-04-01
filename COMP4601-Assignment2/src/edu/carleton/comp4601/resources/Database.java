@@ -48,7 +48,7 @@ public class Database {
 			ArrayList<BigDecimal> genreSentiments = sentiments.get(genre);
 			ArrayList<String> genreSentimentStrings = new ArrayList<String>();
 			for (BigDecimal sentiment : genreSentiments) {
-				genreSentimentStrings.add(NaiveBayes.format(sentiment));
+				genreSentimentStrings.add(sentiment.toEngineeringString());
 			}
 			doc.put(genre, genreSentimentStrings);
 		}
