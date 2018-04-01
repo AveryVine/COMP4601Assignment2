@@ -113,7 +113,7 @@ public class Crawler extends WebCrawler {
 	public HashSet<String> getUsersFromLinks(ArrayList<String> users) {
 		HashSet<String> validUsers = new HashSet<String>(); 
 		for (String user : users) {
-			if (Database.getInstance().getUser(user) != null) { //if user text is in database then confirm as real user
+			if (Database.getInstance().getUser(user, false) != null) { //if user text is in database then confirm as real user
 				validUsers.add(user);
 			}
 		}

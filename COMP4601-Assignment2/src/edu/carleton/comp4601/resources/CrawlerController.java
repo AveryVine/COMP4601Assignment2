@@ -25,6 +25,9 @@ public class CrawlerController {
 	public static String crawlBaseURL = "";
 	int maxDepthOfCrawling = 10;
 
+	/*
+	 * Description: this class prepares and controls the web crawler
+	 */
 	public CrawlerController(String dir) throws Exception {
 		disableCertificates();
 		CrawlConfig config = new CrawlConfig();
@@ -44,6 +47,11 @@ public class CrawlerController {
 		Database.getInstance();
 	}
 
+	/*
+	 * Description: wipes the database and starts the web crawler
+	 * Input: none
+	 * Return: none
+	 */
 	public void crawl() {
 		Database.getInstance().clear();
 		controller.start(Crawler.class, numberOfCrawlers);

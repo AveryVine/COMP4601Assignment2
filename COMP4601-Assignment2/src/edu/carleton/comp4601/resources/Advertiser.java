@@ -6,7 +6,7 @@ public class Advertiser {
 		WebPage webpage = Database.getInstance().getWebPage(page);
 		String pageHtml = webpage.getHTML();
 		String pageAdGenre = webpage.getGenre();
-		String userAdGenre = Database.getInstance().getUser(user).getPreferredGenre();
+		String userAdGenre = Database.getInstance().getUser(user, true).getPreferredGenre();
 		String bodyTag = "<body>";
 		int insertIndex = pageHtml.indexOf(bodyTag) + bodyTag.length();
 		String ads = "<div>User-based Advertisement: " + userAdGenre + "<hr></div>" + "<div>Page-based Advertisement: " + pageAdGenre + "<hr></div>";
