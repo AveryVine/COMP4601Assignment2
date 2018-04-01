@@ -2,6 +2,11 @@ package edu.carleton.comp4601.resources;
 
 public class Advertiser {
 
+	/*
+	 * Description: augments a page's html with advertising relevant to the user viewing the page and the page itself
+	 * Input: the user viewing the page, the page to view
+	 * Return: the augmented html
+	 */
 	public static String augment(String user, String page) {
 		WebPage webpage = Database.getInstance().getWebPage(page);
 		String pageHtml = webpage.getHTML();

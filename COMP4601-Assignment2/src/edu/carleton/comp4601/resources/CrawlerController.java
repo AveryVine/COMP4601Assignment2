@@ -57,6 +57,11 @@ public class CrawlerController {
 		controller.start(Crawler.class, numberOfCrawlers);
 	}
 	
+	/*
+	 * Description: Max's crawler wasn't working, so this disables certificate limitations
+	 * Input: none
+	 * Return: none
+	 */
 	public void disableCertificates() {
 		TrustManager[] trustAllCerts = new TrustManager[] {
 				new X509TrustManager() {

@@ -10,10 +10,18 @@ import java.util.Map.Entry;
 
 public class SentimentAnalyzer extends NaiveBayes {
 
+	/*
+	 * Description: this class implements the Naive Bayes algorithm with the purpose of calculating the sentiment of text
+	 */
 	public SentimentAnalyzer() {
 		super(new ArrayList<String>(Arrays.asList("positive", "negative")));
 	}
 	
+	/*
+	 * Description: analyzes the movie reviews for every user in the database to determine sentiment
+	 * Input: none
+	 * Return: none
+	 */
 	@Override
 	public void analyze() {
 		System.out.println("Retrieving users from database...");
@@ -56,6 +64,11 @@ public class SentimentAnalyzer extends NaiveBayes {
 		}
 	}
 	
+	/*
+	 * Description: retrieves the list of reviews from a given webpage, linked to their respective users
+	 * Input: the webpage to analyze
+	 * Return: the list of reviews from the webpage
+	 */
 	public HashMap<String, String> getReviewsFromPage(WebPage webPage) {
 		HashMap<String, String> reviews = new HashMap<String, String>();
 		HashSet<String> usernames = webPage.getUsers();
