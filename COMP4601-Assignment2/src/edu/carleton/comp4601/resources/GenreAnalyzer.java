@@ -1,13 +1,8 @@
 package edu.carleton.comp4601.resources;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import org.jsoup.Jsoup;
 
 public class GenreAnalyzer extends NaiveBayes {
 	

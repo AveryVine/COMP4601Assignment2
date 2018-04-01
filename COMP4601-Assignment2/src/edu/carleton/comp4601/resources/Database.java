@@ -43,16 +43,11 @@ public class Database {
 		doc.put("url", user.getUrl());
 		doc.put("preferredGenre", user.getPreferredGenre());
 		doc.put("webpages", user.getWebPages());
-		HashMap<String, ArrayList<BigDecimal>> sentiments = user.getSentiments();
-		for (String genre : sentiments.keySet()) {
-			ArrayList<BigDecimal> genreSentiments = sentiments.get(genre);
-			ArrayList<String> genreSentimentStrings = new ArrayList<String>();
-			for (BigDecimal sentiment : genreSentiments) {
-				genreSentimentStrings.add(sentiment.toEngineeringString());
-			}
-			doc.put(genre, genreSentimentStrings);
+		HashMap<String, BigDecimal> sentimentScores = user.getSentiments();
+		for (String genre : GenreAnalyzer.GENRES) {
+			doc.put(genre, sentimentScores.get(genre).toEngineeringString());
 		}
-		doc.put("reviews", user.getReviews()); //might break here
+		doc.put("reviews", user.getReviews());
 		return doc;
 	}
 	
@@ -75,18 +70,11 @@ public class Database {
 		String url = doc.getString("url");
 		String preferredGenre = doc.getString("preferredGenre");
 		ArrayList<String> webpages = (ArrayList<String>) doc.get("webpages");
-		HashMap<String, ArrayList<BigDecimal>> sentiments = new HashMap<String, ArrayList<BigDecimal>>();
+		HashMap<String, BigDecimal> sentimentScores = new HashMap<String, BigDecimal>();
 		for (String genre : GenreAnalyzer.GENRES) {
-			ArrayList<String> genreSentimentStrings = (ArrayList<String>) doc.get(genre);
-			ArrayList<BigDecimal> genreSentiments = new ArrayList<BigDecimal>();
-			for (String sentiment : genreSentimentStrings) {
-				System.out.println(name);
-				System.out.println(sentiment);
-				genreSentiments.add(new BigDecimal(sentiment));
-			}
-			sentiments.put(genre, genreSentiments);
+			sentimentScores.put(genre, new BigDecimal(doc.getString(genre)));
 		}
-		return new User(docId, name, url, preferredGenre, webpages, sentiments);
+		return new User(docId, name, url, preferredGenre, webpages, sentimentScores);
 	}
 	
 	@SuppressWarnings("unchecked")

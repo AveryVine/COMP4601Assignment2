@@ -92,11 +92,11 @@ public class Crawler extends WebCrawler {
 				if (title != "" && !title.contains(" ")) {
 					System.out.println("Adding user");
 					String preferredGenre = null;
-					HashMap<String, ArrayList<BigDecimal>> sentiments = new HashMap<String, ArrayList<BigDecimal>>();
+					HashMap<String, BigDecimal> sentimentScores = new HashMap<String, BigDecimal>();
 					for (String genre : GenreAnalyzer.GENRES) {
-						sentiments.put(genre, new ArrayList<BigDecimal>());
+						sentimentScores.put(genre, BigDecimal.valueOf(0));
 					}
-					User user = new User(docId, title, url, preferredGenre, links, sentiments);
+					User user = new User(docId, title, url, preferredGenre, links, sentimentScores);
 					Database.getInstance().insert(user);
 				}
 			} else {
