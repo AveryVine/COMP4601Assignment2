@@ -80,6 +80,8 @@ public class Database {
 			ArrayList<String> genreSentimentStrings = (ArrayList<String>) doc.get(genre);
 			ArrayList<BigDecimal> genreSentiments = new ArrayList<BigDecimal>();
 			for (String sentiment : genreSentimentStrings) {
+				System.out.println(name);
+				System.out.println(sentiment);
 				genreSentiments.add(new BigDecimal(sentiment));
 			}
 			sentiments.put(genre, genreSentiments);
@@ -115,13 +117,13 @@ public class Database {
 	}
 	
 	public ArrayList<User> getUsers() {
-		ArrayList<Document> docs = (ArrayList<Document>) userCollection.find().into(new ArrayList<Document>());
-		System.out.println("Number of user documents: " + docs.size());
-		ArrayList<User> userList = new ArrayList<User>();
+		Document query = new Document();
+		FindIterable<Document> docs = userCollection.find(query);
+		ArrayList<User> users = new ArrayList<User>();
 		for (Document doc : docs) {
-			userList.add(deserializeUser(doc));
+			users.add(deserializeUser(doc));
 		}
-		return userList;	 
+		return users;	 
 	}
 	
 	public void setUsers(ArrayList<User> users) {
