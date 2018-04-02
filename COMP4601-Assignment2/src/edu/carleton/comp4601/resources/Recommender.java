@@ -92,9 +92,9 @@ public class Recommender {
 	}
 	
 	/*
-	 * Description: 
-	 * Input: 
-	 * Return: 
+	 * Description: visual representation of users grouped into their communities based on their preferred genre
+	 * Input: None
+	 * Return: an HTML representation of users grouped into their communities based on their preferred genre
 	 */
 	@GET
 	@Path("community")
@@ -150,9 +150,9 @@ public class Recommender {
 	}
 	
 	/*
-	 * Description: 
-	 * Input: 
-	 * Return: 
+	 * Description: shows the advertisements for a given category
+	 * Input: Category as a string
+	 * Return: html representation that gives advertising for the category (if exists)
 	 */
 	@GET
 	@Path("advertising/{category}")
