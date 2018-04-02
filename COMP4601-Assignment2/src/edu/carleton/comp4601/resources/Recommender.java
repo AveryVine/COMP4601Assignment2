@@ -84,7 +84,7 @@ public class Recommender {
 				
 		String res = "<table border='1px'> ";
 		res += User.htmlTableHeader();
-		for (User user : Database.getInstance().getUsers()) {
+		for (User user : Database.getInstance().getUsers(true)) {
 			res += user.htmlTableData();
 		}
 		res += "</table>";

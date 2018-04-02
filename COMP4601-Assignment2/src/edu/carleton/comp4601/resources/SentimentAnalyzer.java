@@ -25,7 +25,7 @@ public class SentimentAnalyzer extends NaiveBayes {
 	@Override
 	public void analyze() {
 		System.out.println("Retrieving users from database...");
-		ArrayList<User> dbUsers = Database.getInstance().getUsers();
+		ArrayList<User> dbUsers = Database.getInstance().getUsers(false);
 		HashMap<String, User> users = new HashMap<String, User>();
 		for (User user : dbUsers) {
 			users.put(user.getName(), user);
