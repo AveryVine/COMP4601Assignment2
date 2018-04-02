@@ -29,6 +29,9 @@ public abstract class NaiveBayes {
 	protected HashSet<String> stopWords;
 	protected int totalClassDocs, totalVocabulary;
 	
+	/*
+	 * Description: this class provides an interface for use of the Naive Bayes algorithm, for various purposes
+	 */
 	protected NaiveBayes(ArrayList<String> classes) {
 		this.classes = classes;
 		
@@ -52,8 +55,18 @@ public abstract class NaiveBayes {
 		calculateConditionalWordProbabilities();
 	}
 	
+	/*
+	 * Description: a function that should be implemented by derived classes, to work with the data provided by the Naive Bayes algorithm
+	 * Input: none
+	 * Return: none
+	 */
 	public abstract void analyze();
 	
+	/*
+	 * Description: processes a piece of text and returns a score based off the Naive Bayes algorithm
+	 * Input: the text to process
+	 * Return: the list of scores relevant to the text
+	 */
 	protected ArrayList<BigDecimal> processText(String text) {
 		text = cleanText(text);
 		ArrayList<String> words = new ArrayList<String>(Arrays.asList(text.split(" ")));
@@ -62,6 +75,11 @@ public abstract class NaiveBayes {
 		return scores;
 	}
 	
+	/*
+	 * Description: reads stop words in from a file
+	 * Input: none
+	 * Return: none
+	 */
 	private void readStopWords() {
 		System.out.println("Reading stop words...");
 		File file = new File(trainingPath + "stopwords.txt");
@@ -81,6 +99,11 @@ public abstract class NaiveBayes {
 		} 
 	}
 	
+	/*
+	 * Description: reads text in from a file for the purpose of training
+	 * Input: the file to read
+	 * Return: the content of the file
+	 */
 	@SuppressWarnings("resource")
 	private String readClassFile(File file) {
 		String content = "";
@@ -97,6 +120,11 @@ public abstract class NaiveBayes {
 		return content;
 	}
 	
+	/*
+	 * Description: reads the text of all of the files to be used for training
+	 * Input: none
+	 * Return: none
+	 */
 	private void readClassText() {
 		System.out.println("Reading class text...");
 		totalClassDocs = 0;
@@ -113,6 +141,11 @@ public abstract class NaiveBayes {
 		}
 	}
 	
+	/*
+	 * Description: calculates the prior for each class
+	 * Input: none
+	 * Return: none
+	 */
 	private void calculateClassPriors() {
 		System.out.println("Calculating class priors...");
 		for (int i = 0; i < classes.size(); i++) {
@@ -121,6 +154,11 @@ public abstract class NaiveBayes {
 		
 	}
 	
+	/*
+	 * Description: cleans all of the training data by removing stop words, etc. 
+	 * Input: none
+	 * Return: none
+	 */
 	private void cleanClassTexts() {
 		System.out.println("Cleaning class texts...");
 		ArrayList<ArrayList<String>> cleanedClassTexts = new ArrayList<ArrayList<String>>();
@@ -134,6 +172,11 @@ public abstract class NaiveBayes {
 		classTexts = cleanedClassTexts;
 	}
 	
+	/*
+	 * Description: cleans the provided text by removing stop words, etc.
+	 * Input: the text to clean
+	 * Return: the cleaned text
+	 */
 	protected String cleanText(String text) {		
 		text = text.toLowerCase().replaceAll("[^A-Za-z0-9 ]", " ").trim().replaceAll(" +", " ");
 		
@@ -148,6 +191,11 @@ public abstract class NaiveBayes {
 		return String.join(" ", removedTextList);
 	}
 	
+	/*
+	 * Description: determines the most common words across all classes
+	 * Input: none
+	 * Return: none
+	 */
 	private void determineTopWords() {
 		System.out.println("Determining top words...");
 		ArrayList<LinkedHashMap<String, Integer>> tempClassWordMaps = new ArrayList<LinkedHashMap<String, Integer>>();
@@ -180,6 +228,11 @@ public abstract class NaiveBayes {
 		}
 	}
 	
+	/*
+	 * Description: takes in a list of words across multiple classes, and keeps only those words that appear in all classes
+	 * Input: the list of words in all of the classes
+	 * Return: the mutual words between those classes
+	 */
 	public ArrayList<LinkedHashMap<String, Integer>> onlyKeepMutualWords(ArrayList<LinkedHashMap<String, Integer>> mapList) {
 		HashSet<String> mutualWords = new HashSet<String>();
 		if (mapList.size() == 0) {
@@ -214,6 +267,11 @@ public abstract class NaiveBayes {
 		return tempMapList;
 	}
 	
+	/*
+	 * Description: sorts the contents of a word map by value (number of times it appears)
+	 * Input: the word map to sort
+	 * Return: the sorted word map
+	 */
 	private static <K, V extends Comparable<? super Integer>> LinkedHashMap<String, Integer> sortByValue(Map<String, Integer> map) {
         List<Entry<String, Integer>> list = new ArrayList<>(map.entrySet());
         list.sort((o2, o1) -> o1.getValue().compareTo(o2.getValue()));
@@ -226,6 +284,11 @@ public abstract class NaiveBayes {
         return result;
     }
 	
+	/*
+	 * Description: counts the total number of words in a class
+	 * Input: none
+	 * Return: none
+	 */
 	private void countClassValues() {
 		System.out.println("Counting class values...");
 		for (int i = 0; i < classes.size(); i++) {
@@ -237,10 +300,20 @@ public abstract class NaiveBayes {
 		}
 	}
 	
+	/*
+	 * Description: counts the number of times a specific word appears in a class
+	 * Input: the word to count, the map of words in the class
+	 * Return: the number of times the word appears in the class
+	 */
 	private int getCountOfWordInClass(String word, LinkedHashMap<String, Integer> classWords) {
 		return classWords.containsKey(word) ? classWords.get(word) : 0; 
 	}
 	
+	/*
+	 * Description: calculates the chance of any given word appearing in any given class
+	 * Input: none
+	 * Return: none
+	 */
 	private void calculateConditionalWordProbabilities() {
 		System.out.println("Calculating conditional word probabilities...");
 		for (int i = 0; i < classes.size(); i++) {
@@ -256,6 +329,11 @@ public abstract class NaiveBayes {
 		}
 	}
 	
+	/*
+	 * Description: calculates the score of a particular list of words according to the trained Naive Bayes algorithm
+	 * Input: the list of words to score
+	 * Return: the score of the words
+	 */
 	protected ArrayList<BigDecimal> calculateClassScores(ArrayList<String> words) {
 		ArrayList<BigDecimal> classScores = new ArrayList<BigDecimal>();
 		for (int i = 0; i < classes.size(); i++) {
@@ -274,6 +352,11 @@ public abstract class NaiveBayes {
 		return classScores;
 	}
 	
+	/*
+	 * Description: retrieves the classes in this Naive Bayes instance
+	 * Input: none
+	 * Return: the list of classes
+	 */
 	public ArrayList<String> getClasses() {
 		return classes;
 	}

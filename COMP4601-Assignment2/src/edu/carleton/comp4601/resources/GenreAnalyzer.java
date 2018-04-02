@@ -8,10 +8,18 @@ public class GenreAnalyzer extends NaiveBayes {
 	
 	public static final ArrayList<String> GENRES = new ArrayList<String>(Arrays.asList("comedy", "thriller", "romance", "action", "drama"));
 
+	/*
+	 * Description: this class implements the Naive Bayes algorithm with the purpose of calculating movie genres
+	 */
 	public GenreAnalyzer() {
 		super(GENRES);
 	}
 	
+	/*
+	 * Description: analyzes the contents of all of the movie webpages to determine their genres
+	 * Input: none
+	 * Return: none
+	 */
 	@Override
 	public void analyze() {
 		ArrayList<WebPage> webpages = Database.getInstance().getWebPages();

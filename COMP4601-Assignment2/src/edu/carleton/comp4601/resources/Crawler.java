@@ -43,9 +43,10 @@ public class Crawler extends WebCrawler {
 		return !FILTERS.matcher(href).matches() && ((href.startsWith("https://sikaman.dyndns.org/courses/4601/assignments")));
 	}
 
-	/**
-	 * This function is called when a page is fetched and ready to be processed by
-	 * your program.
+	/*
+	 * Description: visits a webpage, crawls the data, then stores it in the database
+	 * Input: the page to visit
+	 * Return: none
 	 */
 	@Override
 	public void visit(Page page) {
@@ -110,6 +111,11 @@ public class Crawler extends WebCrawler {
 		}
 	}
 	
+	/*
+	 * Description: filters out users from the list provided to ensure that all users actually exist in the database
+	 * Input: the list of users to filter
+	 * Return: the filtered list of users
+	 */
 	public HashSet<String> getUsersFromLinks(ArrayList<String> users) {
 		HashSet<String> validUsers = new HashSet<String>(); 
 		for (String user : users) {
