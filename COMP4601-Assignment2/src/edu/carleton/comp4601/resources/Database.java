@@ -161,15 +161,15 @@ public class Database {
 	
 	/*
 	 * Description: retrieves all the users from the database
-	 * Input: none
+	 * Input: boolean indicating whether or not movie sentiments should be retrieved
 	 * Return: the list of all users
 	 */
-	public ArrayList<User> getUsers() {
+	public ArrayList<User> getUsers(boolean addSentiments) {
 		Document query = new Document();
 		FindIterable<Document> docs = userCollection.find(query);
 		ArrayList<User> users = new ArrayList<User>();
 		for (Document doc : docs) {
-			users.add(deserializeUser(doc, true));
+			users.add(deserializeUser(doc, addSentiments));
 		}
 		return users;	 
 	}
