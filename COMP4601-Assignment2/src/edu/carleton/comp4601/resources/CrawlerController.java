@@ -29,7 +29,7 @@ public class CrawlerController {
 	 * Description: this class prepares and controls the web crawler
 	 */
 	public CrawlerController(String dir) throws Exception {
-		disableCertificates();
+//		disableCertificates();
 		CrawlConfig config = new CrawlConfig();
 		config.setCrawlStorageFolder(crawlStorageFolder);
 		config.setMaxDepthOfCrawling(maxDepthOfCrawling);

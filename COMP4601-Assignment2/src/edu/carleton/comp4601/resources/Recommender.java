@@ -1,5 +1,7 @@
 package edu.carleton.comp4601.resources;
 
+import java.util.ArrayList;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -20,7 +22,8 @@ public class Recommender {
 
 	String name, authorName1, authorName2;
 	CrawlerController controller;
-	NaiveBayes sentimentAnalyzer, genreAnalyzer;
+	GenreAnalyzer genreAnalyzer;
+	SentimentAnalyzer sentimentAnalyzer;
 
 	/*
 	 * Description: constructor for the recommender class
@@ -58,7 +61,7 @@ public class Recommender {
 		Response res = Response.ok().build();
 		try {
 			controller = new CrawlerController(dir);
-			controller.crawl();
+//			controller.crawl();
 			genreAnalyzer = new GenreAnalyzer();
 			genreAnalyzer.analyze();
 		} catch (Exception e) {
@@ -82,9 +85,9 @@ public class Recommender {
 		sentimentAnalyzer = new SentimentAnalyzer();
 		sentimentAnalyzer.analyze();
 				
-		String res = "<table border='1px'> ";
+		String res = "<div>Context</div> <table border='1px'> ";
 		res += User.htmlTableHeader();
-		for (User user : Database.getInstance().getUsers(true)) {
+		for (User user : sentimentAnalyzer.getAnalyzedUsers()) {
 			res += user.htmlTableData();
 		}
 		res += "</table>";
@@ -104,10 +107,17 @@ public class Recommender {
 		String res = "<div>Community</div> <table border>";
 		for (String genre : GenreAnalyzer.GENRES) {
 			String usersInCommunity = "";
-			for (User user : Database.getInstance().getUsersByPreferredGenre(genre)) { 
-				usersInCommunity += user.getName() + ", ";
+			ArrayList<User> users = Database.getInstance().getUsersByPreferredGenre(genre);
+			if (users.size() == 0) {
+				res += "</table>Error: please run /context first!";
+				return wrapHTML("Community", res);
 			}
-			res += "<tr> <td> " + genre + " </td> <td> " + usersInCommunity.substring(0, usersInCommunity.length() - 2) + " </td> </tr>";
+			else {
+				for (User user : users) { 
+					usersInCommunity += "<a href=" + user.getUrl() + ">" + user.getName() + "</a>, ";
+				}
+				res += "<tr> <td> " + genre + " </td> <td> " + usersInCommunity.substring(0, usersInCommunity.length() - 2) + " </td> </tr>";	
+			}
 		}
 		res += " </table>";
 		
