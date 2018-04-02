@@ -61,7 +61,7 @@ public class Recommender {
 		Response res = Response.ok().build();
 		try {
 			controller = new CrawlerController(dir);
-//			controller.crawl();
+			controller.crawl();
 			genreAnalyzer = new GenreAnalyzer();
 			genreAnalyzer.analyze();
 		} catch (Exception e) {

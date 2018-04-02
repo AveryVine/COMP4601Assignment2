@@ -23,7 +23,10 @@ $(document).ready(function() {
     });
 
     $("#advertising").on('click', function() {
-        loadFrame("/advertising/test");
+        var genre = window.prompt("Enter the genre of the advertising you want to view.", "");
+        if (genre != null && genre != "") {
+            loadFrame("/advertising/" + genre.toLowerCase());
+        }
     });
 
 });
@@ -38,7 +41,7 @@ function loadFrame(frameURL) {
 }
 
 function promptForUser(page) {
-    var user = window.prompt("Enter the name of the user that is visiting this page.","");
+    var user = window.prompt("Enter the name of the user that is visiting this page.", "");
     if (user != null && user != "") {
         loadFrame("/fetch/" + user + "/" + page);
     }

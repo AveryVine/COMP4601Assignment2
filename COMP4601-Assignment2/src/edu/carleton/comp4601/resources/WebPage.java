@@ -100,9 +100,9 @@ public class WebPage {
 	 */
 	public String htmlTableData(boolean setPrompts) {
 		if (setPrompts) {
-			return "<tr> <td> " + docId + " </td> <td> " + name + " </td> <td> <a onclick='parent.promptForUser(\"" + name + "\");' href='javascript:void(0);'> " + url + " </a> </td> </tr> ";
+			return "<tr> <td> " + docId + " </td> <td> " + name + " </td> <td> <a onclick='parent.promptForUser(\"" + name + "\");' href='javascript:void(0);'> " + url + " </a> </td> <td> " + genre + " </td> </tr> ";
 		} else {
-			return "<tr> <td> " + docId + " </td> <td> " + name + " </td> <td> <a href='" + url + "'> " + url + " </a> </td> </tr> ";	
+			return "<tr> <td> " + docId + " </td> <td> " + name + " </td> <td> <a href='" + url + "'> " + url + " </a> </td> <td> " + genre + " </td> </tr> ";	
 		}
 	}
 	
@@ -112,7 +112,7 @@ public class WebPage {
 	 * Return: the html table header for the data
 	 */
 	public static String htmlTableHeader() {
-		return "<tr> <th> ID </th> <th> Name </th> <th> URL </th> </tr> ";
+		return "<tr> <th> ID </th> <th> Name </th> <th> URL </th> <th> Genre </th> </tr> ";
 	}
 	
 }
